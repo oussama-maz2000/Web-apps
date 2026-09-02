@@ -1,0 +1,24 @@
+.main-wrapper {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+
+app-header {
+	z-index: 2;
+}
+
+.sidenav-container {
+	flex: 1;
+	width: 100%;
+	overflow-y: auto;
+}
+
+.sidenav {
+	width: 250px;
+}
+
+.router-outlet-container {
+	margin: 1em;
+	min-height: calc(100% - 5em);
+}

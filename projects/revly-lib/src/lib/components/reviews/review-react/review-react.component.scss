@@ -1,0 +1,29 @@
+.react-button {
+	width: 32px;
+	height: 32px;
+	line-height: 32px;
+
+	mat-icon {
+		font-size: 18px;
+		width: 18px;
+		height: 18px;
+		line-height: 18px;
+	}
+
+	&.active {
+		color: var(--primary-color, #3f51b5); // Default primary if var not set
+
+		mat-icon {
+			font-variation-settings: 'FILL' 1;
+		}
+	}
+}
+
+.count {
+	font-size: 0.75rem;
+	color: #6b7280; // text-gray-500
+	font-weight: 500;
+	min-width: 1rem;
+	text-align: center;
+	margin-right: 0.5rem;
+}

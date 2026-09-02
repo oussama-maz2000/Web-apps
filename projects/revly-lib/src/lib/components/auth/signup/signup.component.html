@@ -1,0 +1,366 @@
+<div class="container">
+	<div class="left">
+		<div class="overlay">
+			<h1>Rejoignez Revly et faites partie de la communauté</h1>
+			<p>Trouvez les meilleurs restaurants, cafés, médecins et entreprises autour de vous</p>
+		</div>
+	</div>
+
+	<div class="right">
+		<div class="auth-box">
+			<img src="/assets/revlib/logo.svg" alt="Revly Logo" class="logo" />
+
+			<h2>
+				@if (!isGoogleSignup()) {
+					Créer un compte
+				} @else {
+					Compléter l'inscription
+				}
+			</h2>
+
+			<p>
+				Vous avez déjà un compte ?
+				<a matButton color="accent" (click)="goToLogin()" aria-hidden="true">Se connecter</a>
+			</p>
+
+			<!-- Backend messages -->
+			<app-revlib-backend-result [errorResult]="errorResult()" [successMessage]="successMessage()" />
+
+			<!-- REGULAR REGISTER FORM -->
+			@if (!isGoogleSignup()) {
+				<form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+					<div class="form-content">
+						<!-- Email Field -->
+						<mat-form-field appearance="fill" class="full-width">
+							<mat-icon matPrefix fontIcon="email"></mat-icon>
+							<mat-label>Email</mat-label>
+							<input
+								matInput
+								formControlName="email"
+								placeholder="email@example.com"
+								(blur)="onEmailBlur()"
+								name="email"
+								autocomplete="email"
+								type="email" />
+							<mat-icon matSuffix matTooltip="Votre email est privé et visible uniquement par vous">
+								help
+							</mat-icon>
+
+							@if (emailControl?.hasError('required')) {
+								<mat-error>Email requis</mat-error>
+							}
+							@if (emailControl?.hasError('email') || emailControl?.hasError('pattern')) {
+								<mat-error>Email invalide</mat-error>
+							}
+						</mat-form-field>
+
+						<!-- Password Field -->
+						<app-revlib-password-field controlName="password" [fullWidth]="true" />
+
+						<!--  Name Field  -->
+						<div class="form-row">
+							<mat-form-field appearance="fill">
+								<mat-icon matPrefix fontIcon="person"></mat-icon>
+								<mat-label>Nom</mat-label>
+								<input matInput matTooltip="C'est public et visible par tout le monde" formControlName="name" />
+								@if (nameControl?.hasError('required')) {
+									<mat-error>Nom requis</mat-error>
+								}
+								@if (nameControl?.hasError('minlength')) {
+									<mat-error>
+										Le nom doit contenir au moins
+										{{ nameControl?.errors?.['minlength']?.['requiredLength'] }} caractères.</mat-error
+									>
+								}
+								@if (nameControl?.hasError('maxlength')) {
+									<mat-error
+										>Le nom ne peut pas dépasser
+										{{ nameControl?.errors?.['maxlength']?.['requiredLength'] }} caractères.</mat-error
+									>
+								}
+								@if (
+									nameControl?.hasError('invalidUsername') &&
+									!nameControl?.hasError('maxlength') &&
+									!nameControl?.hasError('minlength')
+								) {
+									<mat-error>{{ nameControl?.errors?.['invalidUsername'] }}</mat-error>
+								}
+							</mat-form-field>
+						</div>
+
+						<!-- City and Language Fields -->
+						<div class="form-row">
+							<mat-form-field appearance="fill" class="location-field">
+								<mat-icon matPrefix fontIcon="location_city"></mat-icon>
+								<mat-label>Wilaya</mat-label>
+
+								<mat-select
+									(click)="loadLocationData()"
+									formControlName="state"
+									(selectionChange)="onWilayaChange($event.value)">
+									@if (locationFacade.wilayasLoading()) {
+										<mat-option [value]="null">
+											<mat-progress-spinner mode="indeterminate" diameter="20"></mat-progress-spinner>
+										</mat-option>
+									} @else {
+										@for (wilaya of locationFacade.wilayas(); track wilaya) {
+											<mat-option [value]="wilaya.code">{{ wilaya.name }} ({{ wilaya.code }})</mat-option>
+										}
+									}
+								</mat-select>
+								@if (stateControl?.touched && stateControl?.hasError('required')) {
+									<mat-error>Le champs Wilaya est requis.</mat-error>
+								}
+							</mat-form-field>
+
+							<button
+								type="button"
+								mat-icon-button
+								aria-label="localization"
+								(click)="detectLocation()"
+								[disabled]="locationFacade.locationDetecting()">
+								<mat-icon [class.spinning]="locationFacade.locationDetecting()">{{
+									locationFacade.locationDetecting() ? 'sync' : 'my_location'
+								}}</mat-icon>
+							</button>
+						</div>
+
+						<!-- Municipality Field -->
+						<mat-form-field appearance="fill" class="full-width">
+							<mat-icon matPrefix fontIcon="place"></mat-icon>
+							<mat-label>Commune</mat-label>
+							<mat-select
+								formControlName="municipality"
+								matTooltip="Nous aidera à fournir de meilleures recommandations">
+								@for (municipality of locationFacade.getMunicipalitiesForSelectedWilaya(); track municipality) {
+									<mat-option [value]="municipality.code">{{ municipality.name }}</mat-option>
+								}
+							</mat-select>
+							@if (
+								municipalityControl?.touched &&
+								municipalityControl?.hasError('required') &&
+								!stateControl?.hasError('required')
+							) {
+								<mat-error>Le champs Commune est requis.</mat-error>
+							}
+							@if (
+								municipalityControl?.touched &&
+								municipalityControl?.hasError('required') &&
+								stateControl?.hasError('required')
+							) {
+								<mat-error>Veuillez d'abord sélectionner une wilaya</mat-error>
+							}
+						</mat-form-field>
+
+						<!-- Preferred Language Field -->
+						<mat-form-field
+							appearance="fill"
+							class="full-width"
+							matTooltip="Bientôt d'autres langues !"
+							matTooltipPosition="above">
+							<mat-icon matPrefix fontIcon="language"></mat-icon>
+							<mat-label>Langue préférée</mat-label>
+							<mat-select formControlName="preferredLanguage">
+								@for (language of languages; track language.value) {
+									<mat-option [value]="language.value">{{ language.label }}</mat-option>
+								}
+							</mat-select>
+							@if (preferredLanguageControl?.touched && preferredLanguageControl?.hasError('required')) {
+								<mat-error>Ce champs est requis.</mat-error>
+							}
+						</mat-form-field>
+
+						<!-- Gender Field -->
+						<div class="form-field-container">
+							<label for="gender-radio-group" class="form-field-label">Genre</label>
+
+							<mat-radio-group id="gender-radio-group" formControlName="gender" class="gender-radio-group">
+								@for (gender of genders; track gender) {
+									<mat-radio-button [value]="gender.value">
+										{{ gender.label }}
+									</mat-radio-button>
+								}
+							</mat-radio-group>
+							@if (genderControl?.touched && genderControl?.hasError('required')) {
+								<mat-error class="radio-error">Ce champs est requis</mat-error>
+							}
+						</div>
+
+						<div class="terms">
+							<mat-checkbox formControlName="acceptTerms">
+								J'accepte les
+								<a href="/terms-of-use" target="_blank" rel="noopener" (click)="$event.stopPropagation()">
+									conditions d'utilisation
+								</a>
+							</mat-checkbox>
+
+							@if (acceptTermsControl?.touched && acceptTermsControl?.invalid) {
+								<mat-error> Vous devez accepter les conditions d'utilisation. </mat-error>
+							}
+						</div>
+					</div>
+
+					<!-- Submit Button -->
+					<button
+						matButton="filled"
+						color="accent"
+						class="auth-button"
+						[disabled]="signupForm.invalid || isLoading()"
+						type="submit">
+						@if (isLoading()) {
+							<mat-icon fontIcon="sync"></mat-icon>
+						}
+						Créer un compte
+					</button>
+
+					<!-- Social Sign-up Section -->
+					<div class="divider">Ou inscrivez-vous avec</div>
+				</form>
+			}
+
+			<!-- GOOGLE REGISTER COMPLETION FORM -->
+			@if (isGoogleSignup()) {
+				<form [formGroup]="googleSignupForm" (ngSubmit)="onSubmit()">
+					<div class="form-content">
+						<!-- Name Field  -->
+						<div class="form-row">
+							<mat-form-field appearance="fill">
+								<mat-label>Nom</mat-label>
+								<input matInput matTooltip="C'est public et visible par tout le monde" formControlName="name" />
+								@if (nameControl?.hasError('required')) {
+									<mat-error>Le champs Nom est requis.</mat-error>
+								}
+								@if (nameControl?.hasError('minlength')) {
+									<mat-error>
+										Le nom doit contenir au moins
+										{{ nameControl?.errors?.['minlength']?.['requiredLength'] }} caractères.</mat-error
+									>
+								}
+								@if (nameControl?.hasError('maxlength')) {
+									<mat-error
+										>Le nom ne peut pas dépasser
+										{{ nameControl?.errors?.['maxlength']?.['requiredLength'] }} caractères.</mat-error
+									>
+								}
+								@if (
+									nameControl?.hasError('invalidUsername') &&
+									!nameControl?.hasError('maxlength') &&
+									!nameControl?.hasError('minlength')
+								) {
+									<mat-error>{{ nameControl?.errors?.['invalidUsername'] }}</mat-error>
+								}
+							</mat-form-field>
+						</div>
+
+						<!-- City Field -->
+						<div class="form-row">
+							<mat-form-field appearance="fill" class="location-field">
+								<mat-icon matPrefix fontIcon="location_city"></mat-icon>
+								<mat-label>Wilaya</mat-label>
+								<mat-select formControlName="state" (selectionChange)="onWilayaChange($event.value)">
+									@for (wilaya of locationFacade.wilayas(); track wilaya) {
+										<mat-option [value]="wilaya.code">{{ wilaya.name }} ({{ wilaya.code }})</mat-option>
+									}
+								</mat-select>
+								@if (stateControl?.touched && stateControl?.hasError('required')) {
+									<mat-error>Le champs Wilaya est requis.</mat-error>
+								}
+							</mat-form-field>
+
+							<button
+								type="button"
+								mat-icon-button
+								aria-label="localisation"
+								(click)="detectLocation()"
+								[disabled]="locationFacade.locationDetecting()">
+								<mat-icon [class.spinning]="locationFacade.locationDetecting()">{{
+									locationFacade.locationDetecting() ? 'sync' : 'my_location'
+								}}</mat-icon>
+							</button>
+						</div>
+
+						<!-- Municipality Field -->
+						<mat-form-field appearance="fill" class="full-width">
+							<mat-icon matPrefix fontIcon="place"></mat-icon>
+							<mat-label>Commune</mat-label>
+							<mat-select formControlName="municipality">
+								@for (municipality of locationFacade.getMunicipalitiesForSelectedWilaya(); track municipality) {
+									<mat-option [value]="municipality.code">{{ municipality.name }}</mat-option>
+								}
+							</mat-select>
+							@if (municipalityControl?.touched && municipalityControl?.hasError('required')) {
+								<mat-error>Le champs Commune est requis.</mat-error>
+							}
+						</mat-form-field>
+
+						<!-- preferred language -->
+						<mat-form-field
+							appearance="fill"
+							class="full-width"
+							matTooltip="Bientôt d'autres langues !"
+							matTooltipPosition="above">
+							<mat-icon matPrefix fontIcon="language"></mat-icon>
+							<mat-label>Langue préférée</mat-label>
+							<mat-select formControlName="preferredLanguage">
+								@for (language of languages; track language) {
+									<mat-option [value]="language.value">{{ language.label }}</mat-option>
+								}
+							</mat-select>
+							@if (preferredLanguageControl?.touched && preferredLanguageControl?.hasError('required')) {
+								<mat-error>Ce champs est requis.</mat-error>
+							}
+						</mat-form-field>
+
+						<!-- Gender Field -->
+						<div class="form-field-container">
+							<label for="gender-radio-group-google" class="form-field-label">Genre</label>
+							<mat-radio-group id="gender-radio-group-google" formControlName="gender" class="gender-radio-group">
+								@for (gender of genders; track gender) {
+									<mat-radio-button [value]="gender.value">{{ gender.label }}</mat-radio-button>
+								}
+							</mat-radio-group>
+							@if (genderControl?.touched && genderControl?.hasError('required')) {
+								<mat-error class="radio-error">Ce champs est requis</mat-error>
+							}
+						</div>
+
+						<div class="terms">
+							<mat-checkbox formControlName="acceptTerms">
+								J'accepte les
+								<a href="/terms-of-use" target="_blank" rel="noopener" (click)="$event.stopPropagation()">
+									conditions d'utilisation
+								</a>
+							</mat-checkbox>
+
+							@if (acceptTermsControl?.touched && acceptTermsControl?.invalid) {
+								<mat-error> Vous devez accepter les conditions d'utilisation. </mat-error>
+							}
+						</div>
+					</div>
+
+					<!-- Submit Button -->
+					<button
+						matButton="filled"
+						color="accent"
+						class="auth-button"
+						[disabled]="googleSignupForm.invalid || isLoading()"
+						type="submit">
+						@if (isLoading()) {
+							<mat-icon fontIcon="sync"></mat-icon>
+						}
+						Compléter l'inscription
+					</button>
+				</form>
+			}
+
+			<!-- Google Auth Button (Only show on regular signup) -->
+			@if (!isGoogleSignup()) {
+				<div
+					id="google-signup-button"
+					class="google-button-container"
+					[class.pulse]="isGoogleButonShaking()"
+					(animationend)="onAnimationEnd()"></div>
+			}
+		</div>
+	</div>
+</div>

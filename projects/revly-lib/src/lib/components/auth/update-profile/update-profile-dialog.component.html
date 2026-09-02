@@ -1,0 +1,175 @@
+<div class="min-w-[500px] max-w-[600px]">
+	<!-- Enhanced Header -->
+	<h2 mat-dialog-title class="!mb-0 !pb-4 border-b border-gray-200">
+		<div class="flex items-center gap-3">
+			<div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+				<mat-icon class="text-blue-600">edit</mat-icon>
+			</div>
+			<div>
+				<div class="text-xl font-semibold text-gray-900">Modifier votre profil</div>
+				<div class="text-sm font-normal text-gray-500 mt-0.5">Mettez à jour vos informations personnelles</div>
+			</div>
+		</div>
+	</h2>
+
+	<mat-dialog-content [formGroup]="updateProfileForm" class="mat-typography !pt-6 !px-6 !pb-2">
+		<div class="space-y-5">
+			<!-- Name Field -->
+			<div class="space-y-2">
+				<label class="block text-sm font-medium text-gray-700">
+					<mat-icon class="align-middle text-gray-500 !text-lg !w-5 !h-5 mr-1">person</mat-icon>
+					Nom
+					<span class="text-xs text-gray-500 font-normal ml-1">(Public)</span>
+				</label>
+				<mat-form-field class="w-full">
+					<input matInput placeholder="Entrez votre nom" formControlName="name" />
+					@if (nameControl?.hasError('required')) {
+						<mat-error>Le nom est requis</mat-error>
+					}
+					@if (nameControl?.hasError('minlength')) {
+						<mat-error>
+							Minimum {{ nameControl?.errors?.['minlength']?.['requiredLength'] }} caractères
+						</mat-error>
+					}
+					@if (nameControl?.hasError('maxlength')) {
+						<mat-error>
+							Maximum {{ nameControl?.errors?.['maxlength']?.['requiredLength'] }} caractères
+						</mat-error>
+					}
+					@if (
+						nameControl?.hasError('invalidUsername') &&
+						!nameControl?.hasError('maxlength') &&
+						!nameControl?.hasError('minlength')
+					) {
+						<mat-error>{{ nameControl?.errors?.['invalidUsername'] }}</mat-error>
+					}
+					<mat-hint class="text-xs">
+						@if (this.hasNameChanges()) {
+							Nom a déja été modifié dans le passé
+						} @else {
+							Vous pouvez le modifier qu'une seule fois.
+						}
+					</mat-hint>
+				</mat-form-field>
+			</div>
+
+			<!-- Location Section -->
+			<div class="space-y-2">
+				<label class="block text-sm font-medium text-gray-700">
+					<mat-icon class="align-middle text-gray-500 !text-lg !w-5 !h-5 mr-1">location_on</mat-icon>
+					Localisation
+				</label>
+
+				<!-- Wilaya Field with Auto-detect -->
+				<div class="flex gap-2 mb-3">
+					<mat-form-field class="flex-1">
+						<mat-label>Wilaya</mat-label>
+						<mat-select
+							(click)="loadLocationData()"
+							formControlName="state"
+							(selectionChange)="onWilayaChange($event.value)">
+							@if (locationFacade.wilayasLoading()) {
+								<mat-option [value]="null" disabled>
+									<div class="flex items-center gap-2">
+										<mat-spinner diameter="16"></mat-spinner>
+										<span>Chargement...</span>
+									</div>
+								</mat-option>
+							} @else {
+								@for (wilaya of locationFacade.wilayas(); track wilaya) {
+									<mat-option [value]="wilaya.code">
+										{{ wilaya.name }}
+										<span class="text-gray-500 text-xs ml-1">({{ wilaya.code }})</span>
+									</mat-option>
+								}
+							}
+						</mat-select>
+						@if (stateControl?.touched && stateControl?.hasError('required')) {
+							<mat-error>Veuillez sélectionner une wilaya</mat-error>
+						}
+					</mat-form-field>
+
+					<button
+						type="button"
+						matIconButton
+						color="primary"
+						matTooltip="Détecter ma position"
+						matTooltipPosition="above"
+						(click)="detectLocation()"
+						[disabled]="locationFacade.locationDetecting()"
+						class="!mt-1">
+						<mat-icon [class.animate-spin]="locationFacade.locationDetecting()">
+							{{ locationFacade.locationDetecting() ? 'sync' : 'my_location' }}
+						</mat-icon>
+					</button>
+				</div>
+
+				<!-- Municipality Field -->
+				<mat-form-field class="w-full">
+					<mat-label>Commune</mat-label>
+					<mat-select formControlName="municipality">
+						@if (locationFacade.getMunicipalitiesForSelectedWilaya().length === 0) {
+							<mat-option [value]="null" disabled> Sélectionnez d'abord une wilaya </mat-option>
+						}
+						@for (municipality of locationFacade.getMunicipalitiesForSelectedWilaya(); track municipality) {
+							<mat-option [value]="municipality.code">{{ municipality.name }}</mat-option>
+						}
+					</mat-select>
+					<mat-hint class="text-xs">Aide à fournir de meilleures recommandations</mat-hint>
+					@if (
+						municipalityControl?.touched &&
+						municipalityControl?.hasError('required') &&
+						!stateControl?.hasError('required')
+					) {
+						<mat-error>Veuillez sélectionner une commune</mat-error>
+					}
+					@if (
+						municipalityControl?.touched &&
+						municipalityControl?.hasError('required') &&
+						stateControl?.hasError('required')
+					) {
+						<mat-error>Sélectionnez d'abord une wilaya</mat-error>
+					}
+				</mat-form-field>
+			</div>
+
+			<!-- Language Field -->
+			<div class="space-y-2">
+				<label class="block text-sm font-medium text-gray-700">
+					<mat-icon class="align-middle text-gray-500 !text-lg !w-5 !h-5 mr-1">language</mat-icon>
+					Langue préférée
+					<span class="text-xs text-blue-600 font-normal ml-1">✨ Bientôt d'autres langues</span>
+				</label>
+				<mat-form-field class="w-full">
+					<mat-select formControlName="preferredLanguage">
+						@for (language of languages; track language.value) {
+							<mat-option [value]="language.value" [disabled]="language.code.toString() !== 'fr'">
+								<span class="flex items-center gap-2">
+									{{ language.label }}
+								</span>
+							</mat-option>
+						}
+					</mat-select>
+					@if (preferredLanguageControl?.touched && preferredLanguageControl?.hasError('required')) {
+						<mat-error>Veuillez sélectionner une langue</mat-error>
+					}
+				</mat-form-field>
+			</div>
+		</div>
+	</mat-dialog-content>
+
+	<!-- Enhanced Actions -->
+	<mat-dialog-actions class="!p-6 !pt-4 border-t border-gray-200 flex justify-between items-center">
+		<button matButton (click)="onCancel()" type="button" class="!text-gray-600">Annuler</button>
+		<button
+			matButton="filled"
+			color="primary"
+			(click)="onConfirm()"
+			[disabled]="updateProfileForm.invalid"
+			type="button"
+			class="!px-6">
+			<mat-icon class="!mr-1">check</mat-icon>
+			Enregistrer les modifications
+		</button>
+	</mat-dialog-actions>
+</div>

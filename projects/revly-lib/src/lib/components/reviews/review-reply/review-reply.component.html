@@ -1,0 +1,96 @@
+<div class="reply-container">
+	<div class="reply-line"></div>
+
+	<div class="reply-content-wrapper">
+		@if (replyDto() !== null && replyDto()?.text !== '') {
+			<!-- Display existing reply -->
+			<div class="reply-display">
+				<div class="flex gap-3">
+					<revlib-avatar
+						[name]="replyDto()!.businessName"
+						[color]="'fff'"
+						[background]="'000'"
+						[size]="32"
+						[rounded]="true"
+						[length]="1"
+						[bold]="true" />
+					<div class="flex-1">
+						<div class="flex justify-between items-start">
+							<div>
+								<div class="font-medium text-sm">{{ replyDto()?.businessName }}</div>
+								<div class="text-xs text-gray-400">{{ replyDto()?.createdAt | date: 'medium' }}</div>
+							</div>
+							@if (isOwner()) {
+								<button mat-icon-button color="warn" class="small-icon-button" (click)="onDeleteClick()">
+									<mat-icon>delete</mat-icon>
+								</button>
+							}
+						</div>
+						<div class="mt-2 text-sm text-gray-700 leading-relaxed">
+							{{ replyDto()?.text }}
+						</div>
+						@if (showDeleteConfirm()) {
+							<div class="bg-red-100 p-4 rounded-lg text-red-800 mt-2">
+								Êtes-vous sûr de vouloir supprimer cette réponse ?
+								<div class="flex gap-2 mt-3 justify-end">
+									<!-- Cancel Button -->
+									<button
+										type="button"
+										(click)="cancelDelete()"
+										[disabled]="isDeleting()"
+										class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition">
+										Annuler
+									</button>
+
+									<!-- Confirm Delete Button -->
+									<button
+										type="button"
+										(click)="confirmDelete()"
+										[disabled]="isDeleting()"
+										class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition">
+										Confirmer
+									</button>
+								</div>
+							</div>
+						}
+					</div>
+				</div>
+			</div>
+		} @else if (isReplying()) {
+			<!-- Reply Form -->
+			<div class="reply-form-container">
+				<form [formGroup]="replyForm" (ngSubmit)="onSubmit()">
+					<mat-form-field class="w-full">
+						<mat-label>Votre réponse</mat-label>
+						<textarea
+							matInput
+							formControlName="text"
+							rows="3"
+							placeholder="Écrivez votre réponse ici (min 20 caractères)..."></textarea>
+						@if (replyForm.get('text')?.hasError('minlength')) {
+							<mat-error>La réponse doit contenir au moins 20 caractères.</mat-error>
+						}
+					</mat-form-field>
+					<div class="flex justify-end gap-2 mt-2">
+						<button matButton type="button" (click)="onCancel()">Annuler</button>
+						<button
+							mat-raised-button
+							color="primary"
+							type="submit"
+							[disabled]="replyForm.invalid || isSubmitting()">
+							Répondre
+						</button>
+					</div>
+				</form>
+			</div>
+		} @else if (isOwner()) {
+			<!-- Reply Button -->
+			<div class="reply-actions">
+				<button matButton color="primary" (click)="onReply()">
+					<mat-icon>reply</mat-icon>
+					Répondre
+				</button>
+			</div>
+		}
+	</div>
+</div>

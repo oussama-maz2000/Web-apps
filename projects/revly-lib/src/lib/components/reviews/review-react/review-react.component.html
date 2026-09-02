@@ -1,0 +1,37 @@
+<div class="flex items-center gap-1">
+	<!-- Helpful Button -->
+	<button
+		mat-icon-button
+		class="react-button"
+		[class.active]="myReaction() === true"
+		(click)="onReact(true)"
+		[disabled]="isBusinessOwner() || review().isMyReview"
+		[matTooltip]="
+			isBusinessOwner()
+				? 'Les propriétaires ne peuvent pas voter'
+				: review().isMyReview
+					? 'Vous ne pouvez pas voter pour votre propre avis'
+					: 'Utile'
+		">
+		<mat-icon>thumb_up</mat-icon>
+	</button>
+	<span class="count">{{ helpfulCount() }}</span>
+
+	<!-- Not Helpful Button -->
+	<button
+		mat-icon-button
+		class="react-button"
+		[class.active]="myReaction() === false"
+		(click)="onReact(false)"
+		[disabled]="isBusinessOwner() || review().isMyReview"
+		[matTooltip]="
+			isBusinessOwner()
+				? 'Les propriétaires ne peuvent pas voter'
+				: review().isMyReview
+					? 'Vous ne pouvez pas voter pour votre propre avis'
+					: 'Pas utile'
+		">
+		<mat-icon>thumb_down</mat-icon>
+	</button>
+	<span class="count">{{ notHelpfulCount() }}</span>
+</div>

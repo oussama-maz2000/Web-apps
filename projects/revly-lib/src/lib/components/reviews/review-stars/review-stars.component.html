@@ -1,0 +1,16 @@
+<div class="flex items-center space-x-1" role="radiogroup" aria-label="Note">
+	@for (s of stars; track s) {
+		<button
+			type="button"
+			class="focus:outline-none"
+			(click)="starClick(s)"
+			[attr.aria-checked]="rating() === s"
+			[disabled]="!editable()"
+			title="{{ s }} étoile">
+			<mat-icon [ngClass]="getStarClass(s)">star</mat-icon>
+		</button>
+	}
+	<!-- @if (rating) {
+    <span class="text-sm ml-2">({{rating}})</span>
+    } -->
+</div>

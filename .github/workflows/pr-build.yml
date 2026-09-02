@@ -1,0 +1,33 @@
+name: Angular PR Build
+
+on:
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22.16.0'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      #- name: Build Revly
+      # run: npm run build -- --project=revly --configuration=production
+      #- name: Build Revly-Admin
+      # run: npm run build -- --project=revly-admin --configuration=production
+
+      - name: Build All
+        run: |
+          npm run build:revly
+          npm run build:revly-admin

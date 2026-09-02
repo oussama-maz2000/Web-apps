@@ -1,0 +1,308 @@
+<div class="flex min-h-screen bg-gray-50">
+	<aside class="w-96 bg-white p-6 shadow-sm">
+		<div class="flex items-center justify-between mb-4">
+			<h2 class="text-xl font-semibold">Filtres</h2>
+			<svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+			</svg>
+		</div>
+		<form [formGroup]="form">
+			<div formGroupName="filter">
+				<div class="mb-6" formGroupName="displayName">
+					<label>Nom</label>
+					<div class="relative">
+						<input
+							formControlName="value"
+							type="text"
+							placeholder="Search..."
+							class="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+						<svg
+							class="absolute left-3 top-2.5 w-5 h-5 text-gray-400"
+							fill="none"
+							stroke="currentColor"
+							viewBox="0 0 24 24">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+						</svg>
+					</div>
+					@if (displayNameValue.invalid && (displayNameValue.touched || displayNameValue.dirty)) {
+						<span class="text-sm text-red-500">
+							@if (displayNameValue.errors?.['minlength']) {
+								Doit comporter au moins 3 caractères
+							}
+						</span>
+					}
+				</div>
+
+				<div class="mb-6" formGroupName="categoryValue">
+					<label>Catégorie</label>
+
+					<div class="relative mt-2">
+						<select
+							formControlName="value"
+							class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+							@for (item of categories(); track $index) {
+								<option [ngValue]="item.value">{{ item.nameFr }}</option>
+							}
+						</select>
+					</div>
+				</div>
+
+				<div class="mb-6" formGroupName="priceRange">
+					<label>Gamme de prix</label>
+
+					<div class="relative mt-2">
+						<select
+							formControlName="value"
+							class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+							@for (item of priceRange; track $index) {
+								<option [value]="item">{{ item }}</option>
+							}
+						</select>
+					</div>
+				</div>
+
+				<div class="mb-6" formGroupName="stateCode">
+					<label>Wilaya</label>
+					<div class="relative mt-2">
+						<select
+							formControlName="value"
+							class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+							@for (item of wilays; track $index) {
+								<option [value]="item">{{ item }}</option>
+							}
+						</select>
+					</div>
+				</div>
+
+				<div class="mb-6" formGroupName="isClaimed">
+					<label>Revendiqué</label>
+					<div class="relative mt-2">
+						<select
+							formControlName="value"
+							class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+							<option [ngValue]="true">Réclamé</option>
+							<option [ngValue]="false">Non réclamé</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="mb-6">
+					<label>Évaluation</label>
+					<div class="flex items-center gap-2" formGroupName="averageRating">
+						<div class="flex items-center">
+							<label for="rating1" class="ml-2 flex items-center gap-1">
+								<div class="flex text-yellow-400">
+									<svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+										<path
+											d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+									</svg>
+								</div>
+							</label>
+						</div>
+						<input
+							formControlName="value"
+							#value
+							type="range"
+							min="0"
+							max="5"
+							value="0"
+							class="flex-1 h-2 bg-yellow-400 rounded-lg appearance-none cursor-pointer" />
+						<span class="text-sm font-medium">{{ value.value }}</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="mb-6" formGroupName="order">
+				<h3 class="font-medium mb-3">Trier par</h3>
+				<div class="space-y-2">
+					<div class="mb-6" formGroupName="displayName">
+						<span>Nom</span>
+						<div class="mt-2">
+							<select
+								formControlName="orderOperator"
+								class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+								<option [ngValue]="null">Tous les noms</option>
+								<option value="DESC">Descendant</option>
+								<option value="ASC">Ascendant</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="mb-6" formGroupName="isClaimed">
+						<span>Est revendiqué</span>
+						<div class="mt-2">
+							<select
+								formControlName="orderOperator"
+								class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+								<option [ngValue]="null">Toutes les réclamations</option>
+								<option value="DESC">Descendant</option>
+								<option value="ASC">Ascendant</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="mb-6" formGroupName="averageRating">
+						<span>Note moyenne</span>
+						<div class="mt-2">
+							<select
+								formControlName="orderOperator"
+								class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+								<option [ngValue]="null">Toutes les évaluations</option>
+								<option value="DESC">Descendant</option>
+								<option value="ASC">Ascendant</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="mb-6" formGroupName="totalReviewsCount">
+						<span>Nombre total d'avis</span>
+						<div class="mt-2">
+							<select
+								formControlName="orderOperator"
+								class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+								<option [ngValue]="null">Tous les avis comptent</option>
+								<option value="DESC">Descendant</option>
+								<option value="ASC">Ascendant</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<button
+				[disabled]="isLoading() || form.invalid"
+				(click)="callApi()"
+				type="button"
+				class="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-medium py-2 px-4 rounded-lg transition-colors">
+				Appliquer
+			</button>
+			<button
+				(click)="resetFormExceptIdAndPagination()"
+				type="button"
+				class="w-full mt-2 bg-gray-400 text-gray-900 font-medium py-2 px-4 rounded-lg transition-colors">
+				Réinitialiser
+			</button>
+		</form>
+	</aside>
+
+	<main class="flex-1 p-8">
+		<div class="flex items-center justify-between mb-6">
+			@if (businesses()?.length) {
+				<h1 class="text-3xl font-bold">{{ businesses()!.length }} résultats</h1>
+			}
+		</div>
+
+		<div class="flex items-center justify-between mb-6">
+			<div class="flex items-center gap-2">
+				<div class="flex items-center justify-between mt-8">
+					<button
+						(click)="previousPage()"
+						[disabled]="!hasPreviousPage || isLoading()"
+						class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition">
+						Précédent
+					</button>
+
+					@if (businesses()?.length) {
+						<div class="text-sm text-gray-600">Affichage {{ businesses()!.length }} entreprise</div>
+					}
+
+					<button
+						(click)="nextPage()"
+						[disabled]="!hasNextPage || isLoading()"
+						class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition">
+						Suivant
+					</button>
+				</div>
+			</div>
+		</div>
+		@if (businessList().length > 0) {
+			<div class="flex-1 p-8">
+				<div class="space-y-4">
+					@for (business of businessList(); track business.id) {
+						<div
+							(click)="goToDetails(business.category?.nameFr!, business.id, business.displayName)"
+							class="bg-white rounded-lg shadow-sm p-6 flex gap-6 hover:shadow-md transition-shadow cursor-pointer">
+							<div class="flex-shrink-0">
+								@if (business.profilePicture?.url; as profilePictureUrl) {
+									<img
+										[src]="buildImageUrl(profilePictureUrl, 'medium')"
+										[alt]="business.displayName"
+										class="w-48 h-32 object-cover rounded-lg" />
+								} @else {
+									<revlib-avatar [name]="business.displayName" [size]="144"></revlib-avatar>
+								}
+
+								<div class="mt-2 text-center">
+									<h3 class="font-semibold">{{ business.displayName }}</h3>
+								</div>
+							</div>
+
+							<div class="flex-1">
+								<h2 class="text-2xl font-bold mb-2">{{ business.displayName }}</h2>
+								<div class="flex items-center gap-2 mb-3">
+									<div class="flex text-yellow-400">
+										@for (star of getStarArray(business.rating?.averageRating ?? 0); track $index) {
+											<svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+												<path
+													d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+											</svg>
+										}
+									</div>
+									<span class="text-xl font-semibold">{{ (business.rating?.averageRating || 0).toFixed(1) }}</span>
+									<span class="text-gray-600">· {{ business.rating?.totalReviewsCount || 0 }} avis</span>
+								</div>
+								<p class="text-gray-700 mb-4">{{ business.fullAddress }}</p>
+								<div class="flex items-center gap-2 flex-wrap">
+									@if (!business.isClaimed) {
+										<span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm flex items-center gap-1">
+											<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+												<path
+													stroke-linecap="round"
+													stroke-linejoin="round"
+													stroke-width="2"
+													d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
+											</svg>
+											Non réclamé
+										</span>
+									}
+
+									<span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm flex items-center gap-1">
+										<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+												d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+												d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+										</svg>
+										{{ business.stateCode }}
+									</span>
+
+									@if (business.category) {
+										<span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm flex items-center gap-1">
+											<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+												<path
+													d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
+											</svg>
+											{{ business.category.nameEn }}
+										</span>
+									}
+								</div>
+							</div>
+						</div>
+					}
+				</div>
+			</div>
+		} @else {
+			<h4 class="text-xl">aucun commerce</h4>
+		}
+	</main>
+</div>

@@ -1,0 +1,39 @@
+/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
+{
+	"compileOnSave": false,
+	"compilerOptions": {
+		"outDir": "./dist/out-tsc",
+		"strict": true,
+		"noImplicitOverride": true,
+		"noPropertyAccessFromIndexSignature": true,
+		"noImplicitReturns": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"skipLibCheck": true,
+		"isolatedModules": true,
+		"esModuleInterop": true,
+		"experimentalDecorators": true,
+		"moduleResolution": "bundler",
+		"paths": {
+			"@revlib/components/*": ["./projects/revly-lib/src/lib/components/*"],
+			"@revlib/services": ["./projects/revly-lib/src/exports/public-services.ts"],
+			"@revlib/core": ["./projects/revly-lib/src/exports/public-core.ts"],
+			"@revlib/graphql": ["./projects/revly-lib/src/exports/public-graphql.ts"],
+			"@revlib/models": ["./projects/revly-lib/src/exports/public-models.ts"],
+			"@revlib/utils": ["./projects/revly-lib/src/exports/public-utils.ts"],
+			"@revlib/store": ["./projects/revly-lib/src/exports/public-store.ts"],
+			"@revlib/assets/*": ["./projects/revly-lib/src/lib/public/*"]
+		},
+		"importHelpers": true,
+		"target": "ES2022",
+		"module": "ES2022"
+	},
+	"angularCompilerOptions": {
+		"enableI18nLegacyMessageIdFormat": false,
+		"strictInjectionParameters": true,
+		"strictInputAccessModifiers": true,
+		"strictTemplates": true
+	}
+}

@@ -1,0 +1,63 @@
+@use 'sass:color';
+@use '../auth.component.scss';
+@use 'animations'; //this import is wokring it jus vscode not resolving when ctrl+click
+
+.terms a {
+	color: var(--mdc-theme-primary, #3f51b5);
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.terms a:hover {
+	text-decoration: none;
+}
+
+// Gender radio button styles
+.form-field-container {
+	margin-bottom: 16px;
+	justify-items: center;
+}
+
+.form-field-label {
+	color: rgba(0, 0, 0, 0.6);
+	margin-bottom: 8px;
+	display: block;
+}
+
+.gender-radio-group {
+	display: flex;
+	flex-direction: row;
+	margin: 12px 0;
+	gap: 16px;
+}
+
+.radio-error {
+	color: #f44336;
+	font-size: 12px;
+	margin-top: 4px;
+}
+
+// Location field setup
+.location-field {
+	flex: 1;
+	margin-right: 8px;
+}
+
+.form-row {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+
+	mat-form-field {
+		flex: 1;
+	}
+}
+
+// Location button styles
+button[mat-icon-button] {
+	mat-icon {
+		&.spinning {
+			animation: spin 1.5s linear infinite;
+		}
+	}
+}

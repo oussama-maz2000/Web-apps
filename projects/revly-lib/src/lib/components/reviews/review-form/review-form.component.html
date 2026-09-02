@@ -1,0 +1,47 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
+	<div>
+		<label class="block text-sm font-medium text-gray-700">Votre note</label>
+		<revlib-review-stars
+			[rating]="rating?.value"
+			(ratingChange)="onStarChange($event)"
+			[editable]="true"></revlib-review-stars>
+		@if (rating?.invalid && (rating?.touched || rating?.dirty)) {
+			<div class="text-red-600 text-sm mt-1">La note est requise (1-5).</div>
+		}
+	</div>
+
+	<div>
+		<mat-form-field appearance="fill" class="w-full">
+			<mat-label>Commentaire</mat-label>
+			<textarea
+				matInput
+				formControlName="text"
+				rows="6"
+				placeholder="Rédigez votre avis (50–2000 caractères)"></textarea>
+		</mat-form-field>
+		<div class="flex justify-between text-sm text-gray-500 mt-1">
+			@if (text?.invalid && (text?.touched || text?.dirty)) {
+				<div class="text-red-600">Le textaire doit contenir entre 50 et 2000 caractères.</div>
+			}
+			<div>{{ text?.value?.length ?? 0 }} / 2000</div>
+		</div>
+	</div>
+
+	<div>
+		<mat-form-field appearance="fill" class="w-full">
+			<mat-label>Fourchette de prix (optionnel)</mat-label>
+			<mat-select formControlName="priceRange">
+				@for (opt of priceRangeOptions; track opt.value) {
+					<mat-option [value]="opt.key">
+						{{ opt.value }}
+					</mat-option>
+				}
+			</mat-select>
+		</mat-form-field>
+	</div>
+
+	<div class="flex items-center space-x-2">
+		<button matButton="filled" color="primary" type="submit">Soumettre l'avis</button>
+		<button matButton type="button" (click)="resetForm()">Réinitialiser</button>
+	</div>
+</form>

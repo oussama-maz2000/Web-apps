@@ -1,0 +1,6 @@
+@if (!connectivityService.isOnline()) {
+	<mat-toolbar color="warn" class="offline-toolbar">
+		<mat-icon class="icon" fontIcon="wifi_off"></mat-icon>
+		<span>La connexion au serveur est perdue</span>
+	</mat-toolbar>
+}

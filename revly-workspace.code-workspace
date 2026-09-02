@@ -1,0 +1,33 @@
+{
+	"folders": [
+		{
+			"name": "revly-lib",
+			"path": "projects/revly-lib"
+		},
+		{
+			"name": "revly",
+			"path": "projects/revly"
+		},
+		{
+			"name": "revly-admin",
+			"path": "projects/revly-admin"
+		},
+		{
+			"name": "Revly-WebApps",
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.exclude": {
+			"**/*.spec.ts": true
+		},
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"[scss]": {
+			"editor.defaultFormatter": "vscode.css-language-features"
+		},
+		"[typescript]": {
+			"editor.defaultFormatter": "esbenp.prettier-vscode",
+			"editor.formatOnSave": true
+		}
+	}
+}

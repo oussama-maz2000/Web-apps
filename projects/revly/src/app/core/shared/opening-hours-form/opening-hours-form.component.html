@@ -1,0 +1,67 @@
+<div [formGroup]="form()">
+	<div class="mb-6">
+		<button mat-raised-button color="primary" (click)="addDay()" [disabled]="hoursArray.length >= 7">
+			Ajouter un jour d'ouverture
+		</button>
+	</div>
+
+	<div formArrayName="hours">
+		@for (group of hoursArray.controls; track $index; let i = $index) {
+			<div [formGroupName]="i" class="border border-gray-300 p-6 rounded-lg mb-6 shadow-sm bg-white">
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+					<!-- Jour -->
+					<mat-form-field>
+						<mat-label>Jour</mat-label>
+						<mat-select formControlName="day">
+							@for (d of days(); track d) {
+								<mat-option [value]="d" [disabled]="usedDays().includes(d) && group.get('day')?.value !== d">
+									{{ DayOfWeek[d] }}
+								</mat-option>
+							}
+						</mat-select>
+						@if (group.get('day')?.hasError('required') && group.get('day')?.touched) {
+							<mat-error>Requis</mat-error>
+						}
+					</mat-form-field>
+
+					<!-- Heure d'ouverture -->
+					<mat-form-field>
+						<mat-label>Heure d'ouverture</mat-label>
+						<input matInput [matTimepicker]="openingPicker" formControlName="openingTime" placeholder="HH:mm" />
+						<mat-timepicker-toggle matIconSuffix [for]="openingPicker"></mat-timepicker-toggle>
+						<mat-timepicker #openingPicker></mat-timepicker>
+						@if (group.get('openingTime')?.hasError('required') && group.get('openingTime')?.touched) {
+							<mat-error>Requis</mat-error>
+						}
+					</mat-form-field>
+
+					<!-- Heure de fermeture -->
+					<mat-form-field>
+						<mat-label>Heure de fermeture</mat-label>
+						<input matInput [matTimepicker]="closingPicker" formControlName="closingTime" placeholder="HH:mm" />
+						<mat-timepicker-toggle matIconSuffix [for]="closingPicker"></mat-timepicker-toggle>
+						<mat-timepicker #closingPicker></mat-timepicker>
+						@if (group.get('closingTime')?.hasError('required') && group.get('closingTime')?.touched) {
+							<mat-error>Requis</mat-error>
+						}
+					</mat-form-field>
+				</div>
+
+				<!-- Erreur globale : fermeture ≤ ouverture -->
+				@if (hasTimeRangeError(group)) {
+					<div class="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+						<p class="text-red-800 text-sm font-medium">
+							L'heure de fermeture doit être strictement supérieure à l'heure d'ouverture.
+						</p>
+					</div>
+				}
+
+				<div class="mt-6 text-right">
+					<button matButton color="warn" (click)="removeDay(i)">Supprimer ce jour</button>
+				</div>
+			</div>
+		} @empty {
+			<div class="text-center py-8 text-gray-500">Aucun jour d'ouverture ajouté pour le moment.</div>
+		}
+	</div>
+</div>

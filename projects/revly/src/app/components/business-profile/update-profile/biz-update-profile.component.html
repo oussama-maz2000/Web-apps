@@ -1,0 +1,231 @@
+<div class="max-w-4xl mx-auto p-6">
+	<!-- Update Profile Header -->
+	<mat-card appearance="outlined" class="bg-gradient-to-br from-sky-600 to-sky-800 text-white overflow-hidden">
+		<mat-card-content class="p-4">
+			<mat-card-header>
+				<div>
+					<mat-card-title class="text-3xl font-extrabold mb-3"
+						>Mettre à jour le profil de l'entreprise</mat-card-title
+					>
+					<mat-card-subtitle>
+						<p class="font-medium text-white">
+							Affinez votre présence commerciale, vos relations sociales et vos heures d'ouverture.
+						</p>
+					</mat-card-subtitle>
+				</div>
+			</mat-card-header>
+		</mat-card-content>
+	</mat-card>
+
+	<!-- Business Pictures Section -->
+	<mat-card appearance="outlined" class="mt-4">
+		<mat-card-content class="p-4 sm:p-6">
+			<app-business-pictures
+				[pictures]="pictures()"
+				[businessId]="profileForm.get('id')?.value!"
+				[businessEncId]="profileForm.get('idEnc')?.value!">
+			</app-business-pictures>
+		</mat-card-content>
+	</mat-card>
+
+	<!-- Update Profile Form -->
+	<form [formGroup]="profileForm" class="flex flex-col space-y-4 mt-4">
+		<!-- Basic Info Section -->
+		<mat-card appearance="outlined">
+			<mat-card-content class="p-2 sm:p-4">
+				<section class="space-y-8">
+					<div class="flex items-center gap-4 mb-2">
+						<div class="p-3 bg-indigo-50 rounded-2xl text-indigo-600">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-6 w-6"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+							</svg>
+						</div>
+						<h3 class="text-xl font-bold text-gray-900">Informations de base</h3>
+						<div class="flex-1 h-px bg-gray-100"></div>
+					</div>
+
+					<div class="grid grid-cols-1">
+						<mat-form-field class="w-full">
+							<mat-label>Nom du commerce</mat-label>
+							<input
+								matInput
+								formControlName="displayName"
+								placeholder="e.g. The Gourmet Kitchen"
+								class="font-medium" />
+							@if (profileForm.get('displayName')?.hasError('required')) {
+								<mat-error>Le nom du commerce est obligatoire</mat-error>
+							}
+							@if (profileForm.get('displayName')?.hasError('minlength')) {
+								<mat-error>Le nom doit contenir au moins 5 caractères</mat-error>
+							}
+						</mat-form-field>
+
+						<mat-form-field class="w-full">
+							<mat-label>Description</mat-label>
+							<textarea
+								matInput
+								formControlName="description"
+								rows="5"
+								placeholder="Tell your customers what makes your business special..."
+								class="leading-relaxed"></textarea>
+							@if (profileForm.get('description')?.hasError('required')) {
+								<mat-error>La description est obligatoire</mat-error>
+							}
+						</mat-form-field>
+
+						<mat-form-field class="w-full">
+							<mat-label>Adresse complète</mat-label>
+							<input matInput formControlName="fullAddress" placeholder="e.g. 123 Culinary Ave, Food City" />
+							@if (profileForm.get('fullAddress')?.hasError('required')) {
+								<mat-error>L'adresse est obligatoire</mat-error>
+							}
+						</mat-form-field>
+
+						<mat-form-field matTooltip="Categorie ne peux pas être changer" class="w-full">
+							<mat-label>Catégorie</mat-label>
+							<mat-select formControlName="categoryValue" (selectionChange)="onCategoryChange()">
+								@for (cat of categories(); track cat.value) {
+									<mat-option [value]="cat.value">
+										{{ cat.nameEn }}
+									</mat-option>
+								}
+							</mat-select>
+							@if (profileForm.get('categoryValue')?.hasError('required')) {
+								<mat-error>La catégorie est obligatoire</mat-error>
+							}
+						</mat-form-field>
+
+						<!-- SubCategory -->
+						@if (selectedCategory) {
+							<mat-form-field class="w-full">
+								<mat-label>Sous-catégories</mat-label>
+								<mat-select formControlName="subCategoriesValues" multiple>
+									@for (sub of selectedCategory.subCategories; track sub.value) {
+										<mat-option [value]="sub.value" class="py-2">
+											<span class="font-medium">{{ sub.nameEn }}</span>
+										</mat-option>
+									}
+								</mat-select>
+								@if (profileForm.get('subCategoriesValues')?.hasError('required')) {
+									<mat-error>Au moins une sous-catégorie est requise</mat-error>
+								}
+							</mat-form-field>
+						}
+					</div>
+				</section>
+			</mat-card-content>
+		</mat-card>
+
+		<!-- Social Links Section -->
+		<mat-card appearance="outlined">
+			<mat-card-content class="p-2 sm:p-4">
+				<section class="space-y-8">
+					<div class="flex items-center gap-4 mb-2">
+						<div class="p-3 bg-blue-50 rounded-2xl text-blue-600">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-6 w-6"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+							</svg>
+						</div>
+						<h3 class="text-xl font-bold text-gray-900">Présence sur les réseaux sociaux</h3>
+						<div class="flex-1 h-px bg-gray-100"></div>
+					</div>
+					<div class="bg-gray-50/50 p-6 rounded-3xl border border-gray-100">
+						<app-social-links-form [form]="$any(profileForm.get('socialLinks'))"></app-social-links-form>
+					</div>
+				</section>
+			</mat-card-content>
+		</mat-card>
+
+		<!-- Opening Hours Section -->
+		<mat-card appearance="outlined">
+			<mat-card-content class="p-2 sm:p-4">
+				<section class="space-y-8">
+					<div class="flex items-center gap-4 mb-2">
+						<div class="p-3 bg-amber-50 rounded-2xl text-amber-600">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-6 w-6"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+							</svg>
+						</div>
+						<h3 class="text-xl font-bold text-gray-900">Horaires d'ouverture</h3>
+						<div class="flex-1 h-px bg-gray-100"></div>
+					</div>
+					<div class="bg-gray-50/50 p-6 rounded-3xl border border-gray-100">
+						<app-opening-hours-form
+							[form]="$any(profileForm.get('openingHours'))"
+							[days]="days"></app-opening-hours-form>
+					</div>
+				</section>
+			</mat-card-content>
+		</mat-card>
+
+		<!-- Backend Results -->
+		<div class="px-2">
+			<app-revlib-backend-result
+				[errorResult]="errorResult()"
+				[successMessage]="successMessage()"></app-revlib-backend-result>
+		</div>
+
+		<div class="flex flex-col sm:flex-row justify-end items-center gap-4">
+			<button
+				matButton
+				type="button"
+				(click)="onCancel()"
+				class="px-8 py-3 text-gray-500 font-semibold hover:bg-gray-100 rounded-xl transition-colors">
+				Annuler les modifications
+			</button>
+			<button
+				matButton="filled"
+				color="primary"
+				type="submit"
+				(click)="onSubmit()"
+				[disabled]="profileForm.invalid || isLoading()"
+				class="w-full sm:w-auto px-12 py-7 text-lg font-bold rounded-2xl transition-all hover:scale-[1.02] active:scale-[0.98] bg-indigo-600 hover:bg-indigo-700">
+				@if (isLoading()) {
+					<div class="flex items-center gap-3">
+						<svg
+							class="animate-spin h-6 w-6 text-white"
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24">
+							<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+							<path
+								class="opacity-75"
+								fill="currentColor"
+								d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+						</svg>
+						<span>Mise à jour du profil en cours...</span>
+					</div>
+				} @else {
+					Enregistrer les modifications
+				}
+			</button>
+		</div>
+	</form>
+</div>

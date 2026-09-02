@@ -1,0 +1,84 @@
+@if (reviewDto()) {
+	<mat-card class="p-4">
+		@if (reviewDto().isPinned) {
+			<div
+				class="absolute top-2 right-2 flex items-center gap-1 bg-amber-50 text-amber-700 px-2 py-1 rounded-full text-xs font-medium border border-amber-200">
+				<mat-icon class="!text-base !w-4 !h-4">push_pin</mat-icon>
+				<span>Épinglé</span>
+			</div>
+		}
+		<div class="flex justify-between items-start">
+			<div class="flex justify-between items-start gap-4">
+				<div class="flex gap-4">
+					@if (reviewDto().reviewer?.profilePictureUrl) {
+						<div class="relative w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0">
+							<div class="w-full h-full rounded-full overflow-hidden ring-2 ring-gray-100 bg-gray-50">
+								<img
+									[src]="buildImageUrl(reviewDto().reviewer?.profilePictureUrl!, 'medium')"
+									[alt]="reviewDto().reviewer?.name || 'Avatar'"
+									class="w-full h-full object-cover" />
+							</div>
+						</div>
+					} @else {
+						<div class="flex-shrink-0">
+							<revlib-avatar
+								[name]="reviewDto().reviewer?.name || 'A'"
+								[color]="'fff'"
+								[background]="'random'"
+								[size]="48"
+								[rounded]="true"
+								[length]="1"
+								[bold]="true" />
+						</div>
+					}
+
+					<div class="flex flex-col gap-1.5 min-w-0">
+						<h3 class="font-semibold text-gray-900 text-base sm:text-lg leading-tight">
+							{{ reviewDto().reviewer?.name }}
+						</h3>
+						<div class="flex items-center">
+							<revlib-review-stars [rating]="reviewDto().rating" [editable]="false" />
+						</div>
+					</div>
+				</div>
+			</div>
+
+			@if (showDelete()) {
+				<div>
+					<button mat-icon-button color="warn" aria-label="Supprimer" (click)="onDelete()">
+						<mat-icon>delete</mat-icon>
+					</button>
+				</div>
+			}
+		</div>
+
+		<div class="text-sm text-gray-600 mt-3">
+			<strong>Prix :</strong>
+			@if (reviewDto().priceRange) {
+				<span>{{ getPriceRangeLabel(reviewDto().priceRange) }}</span>
+			}
+		</div>
+		<div class="mt-1 text-sm leading-relaxed">
+			<revlib-expandable-text [text]="reviewDto().text" [limit]="200" />
+		</div>
+		<div class="mt-3 flex justify-between items-center">
+			<div class="mt-3 text-xs text-gray-400">{{ reviewDto().createdAt | date: 'medium' }}</div>
+			<revlib-review-react
+				[review]="reviewDto()"
+				[businessId]="businessId()"
+				[isBusinessOwner]="isBusinessOwner()" />
+		</div>
+
+		@if (reviewDto().reviewReply?.text || isBusinessOwner()) {
+			<revlib-review-reply
+				[reply]="reviewDto().reviewReply?.text ? reply() : null"
+				[isOwner]="isBusinessOwner()"
+				[businessId]="businessId()"
+				[businessName]="businessName()!"
+				[reviewId]="reviewDto().id"
+				(replyAdded)="onReplyAdded($event)"
+				(replyDeleted)="onReplyDeleted()">
+			</revlib-review-reply>
+		}
+	</mat-card>
+}

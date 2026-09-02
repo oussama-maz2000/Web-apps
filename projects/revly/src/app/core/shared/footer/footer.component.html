@@ -1,0 +1,61 @@
+<footer class="bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 pt-12 pb-8">
+	<div class="max-w-7xl mx-auto px-6 lg:px-8">
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
+			<div class="lg:col-span-2 space-y-6">
+				<a routerLink="/" class="flex items-center gap-3 no-underline group">
+					<img
+						src="/assets/revlib/logo.svg"
+						alt="Logo Revly"
+						class="h-10 w-auto transition-transform group-hover:scale-110" />
+					<span
+						class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">
+						Revly
+					</span>
+				</a>
+				<p class="text-slate-600 dark:text-slate-400 max-w-xs leading-relaxed">
+					Donner de la puissance à votre présence digitale grâce à des solutions modernes. Conçu pour la
+					performance et pensé pour les personnes.
+				</p>
+				<div class="flex gap-2">
+					<button matIconButton class="text-slate-500 hover:text-blue-600"><mat-icon>facebook</mat-icon></button>
+					<button matIconButton class="text-slate-500 hover:text-blue-400">
+						<mat-icon>language</mat-icon>
+					</button>
+					<button matIconButton class="text-slate-500 hover:text-pink-600"><mat-icon>camera</mat-icon></button>
+				</div>
+			</div>
+
+			<div>
+				<h3 class="text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-6">
+					Liens rapides
+				</h3>
+				<ul class="space-y-4 list-none p-0">
+					<li><a routerLink="/" class="footer-link">Accueil</a></li>
+					<li><a routerLink="/profile" class="footer-link">Profile</a></li>
+				</ul>
+			</div>
+
+			<div>
+				<h3 class="text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-6">Politiques</h3>
+				<ul class="space-y-4 list-none p-0">
+					<li><a routerLink="/privacy-policy" class="footer-link">Politique de confidentialité</a></li>
+					<li><a routerLink="/terms-of-use" class="footer-link">Conditions d'utilisation</a></li>
+				</ul>
+			</div>
+
+			<div>
+				<h3 class="text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-6">Entreprise</h3>
+				<ul class="space-y-4 list-none p-0">
+					<li><a routerLink="/about" class="footer-link">À propos</a></li>
+					<li><a routerLink="/contact" class="footer-link">Contact</a></li>
+				</ul>
+			</div>
+		</div>
+
+		<mat-divider class="opacity-50"></mat-divider>
+
+		<div class="flex flex-col md:flex-row mt-6 justify-center items-center gap-4 text-sm text-slate-500">
+			<p>&copy; {{ currentYear }} Revly. Tous droits réservés.</p>
+		</div>
+	</div>
+</footer>

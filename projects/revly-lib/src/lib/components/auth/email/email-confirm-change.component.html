@@ -1,0 +1,22 @@
+<!-- Backend error messages -->
+@if (errorResult()?.errors?.length) {
+	<ul class="server-errors">
+		@for (error of errorResult()?.errors; track error) {
+			<li class="error-message">{{ error.message }}</li>
+		}
+	</ul>
+}
+
+<div class="confirm-change-card" [class.loading-state]="isLoading()">
+	@if (isLoading()) {
+		<mat-spinner></mat-spinner>
+		<p>Confirmation du changement d'email...</p>
+	} @else if (errorResult()?.errors?.length) {
+		<h2 class="title">Échec de la Confirmation</h2>
+		<p class="description">
+			Nous n'avons pas pu confirmer votre changement d'email. Le lien a peut-être expiré ou n'est pas valide.
+		</p>
+
+		<button class="btn-secondary" matButton="outlined" [routerLink]="[LOGIN_PATH]">Se connecter</button>
+	}
+</div>

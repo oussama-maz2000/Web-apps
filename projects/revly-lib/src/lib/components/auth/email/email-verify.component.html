@@ -1,0 +1,66 @@
+<!-- Backend error messages -->
+@if (errorResult()?.errors?.length) {
+	<ul class="server-errors">
+		@for (error of errorResult()?.errors; track error) {
+			<li class="error-message">{{ error.message }}</li>
+		}
+	</ul>
+}
+<!-- ===========================
+     VERIFY STATE (URL had ?email=someone@example.com)
+=========================== -->
+@if (uiState() === 'resend') {
+	<div class="verify-card">
+		<h2 class="title">Email Non Vérifié</h2>
+		<p class="description">
+			Nous vous avons envoyé un lien de vérification à votre boîte de réception lors de votre inscription. Veuillez
+			vérifier votre boîte de réception (et dossier spam) et cliquer sur le lien pour vérifier votre email.
+		</p>
+		<p class="email">
+			<strong>{{ Email() }}</strong>
+		</p>
+		<p class="description">
+			Si vous n'avez pas reçu de lien de vérification, veuillez cliquer sur le bouton ci-dessous pour le renvoyer.
+		</p>
+
+		<button
+			class="btn-resend"
+			matButton="outlined"
+			(click)="resendVerificationEmail()"
+			[disabled]="resendDisabled() || isLoading()"
+			[attr.aria-busy]="isLoading()">
+			@if (isLoading()) {
+				Envoi en cours...
+			} @else if (!resendDisabled()) {
+				Renvoyer le lien de vérification
+			} @else {
+				Renvoyer dans {{ countdown() }}s
+			}
+		</button>
+
+		<button class="btn-secondary" matButton="outlined" [routerLink]="LOGIN_PATH">
+			J'ai Vérifié, Se Connecter
+		</button>
+	</div>
+}
+
+<!-- ===========================
+     CONFIRM STATE ResendState=false
+     Show spinner until the facade navigates you away
+=========================== -->
+@if (uiState() === 'confirm') {
+	<div class="verify-card" [class.loading-state]="isLoading()">
+		@if (isLoading()) {
+			<mat-spinner></mat-spinner>
+
+			<p>Vérification de votre email...</p>
+		} @else if (errorResult()?.errors?.length) {
+			<h2 class="title">Échec de la Vérification</h2>
+			<p class="description">
+				Nous n'avons pas pu vérifier votre email. Le lien a peut-être expiré ou n'est pas valide. Veuillez demander
+				un nouvel email de vérification.
+			</p>
+			<button class="btn-secondary" matButton="outlined" [routerLink]="[LOGIN_PATH]">Se Connecter</button>
+		}
+	</div>
+}

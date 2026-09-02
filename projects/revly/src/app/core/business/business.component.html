@@ -1,0 +1,38 @@
+@if (business()) {
+	@let biz = business()!;
+	<app-business-details [businessDetails]="biz"></app-business-details>
+
+	@if (!isAuthenticated()) {
+		<div class="p-4 border rounded">
+			<p class="text-sm">
+				Vous devez
+				<a (click)="$event.preventDefault(); goToLogin()" class="text-primary-600 underline" href="#"
+					>vous connecter Pour poster un review</a
+				>
+			</p>
+		</div>
+	} @else if (!ownReviews() && !isOwner()) {
+		<revlib-review-form (submitReview)="onSubmitReview($event)" [businessId]="biz.id"> </revlib-review-form>
+	} @else {
+		<revlib-review-display
+			[review]="ownReviews()!"
+			[businessName]="biz.displayName"
+			[businessId]="biz.id"
+			[showDelete]="true"
+			[isBusinessOwner]="isOwner()"
+			(delete)="onDeleteReviewHandler()">
+			>
+		</revlib-review-display>
+	}
+
+	<app-business-reviews
+		[total]="biz.rating?.totalReviewsCount ?? 0"
+		[businessName]="biz.displayName"
+		[businessId]="biz.id"
+		[reviews]="reviews()"
+		[pageInfo]="pageInfo()!"
+		[isBusinessOwner]="isOwner()">
+	</app-business-reviews>
+} @else {
+	<div class="p-6 text-gray-500">Loading business details…</div>
+}

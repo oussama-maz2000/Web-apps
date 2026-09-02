@@ -1,0 +1,49 @@
+.snackbar-content {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	padding: 4px 0;
+}
+
+.snackbar-icon-message {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	flex: 1;
+}
+
+.snackbar-message {
+	font-weight: 500;
+	line-height: 1.4;
+}
+
+.snackbar-actions {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	flex-shrink: 0;
+}
+
+.snackbar-action-btn {
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.snackbar-close-btn {
+	width: 32px;
+	height: 32px;
+
+	mat-icon {
+		font-size: 18px;
+		width: 18px;
+		height: 18px;
+	}
+}
+
+mat-icon {
+	font-size: 20px;
+	width: 20px;
+	height: 20px;
+}

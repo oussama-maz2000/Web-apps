@@ -1,0 +1,39 @@
+<section class="hero-bg h-screen flex items-center justify-center text-center relative">
+	<div class="absolute inset-0 bg-black/60"></div>
+
+	<div class="relative z-10 max-w-3xl px-6 text-white">
+		<h1 class="text-4xl md:text-5xl font-extrabold leading-tight">
+			Trouvez les meilleurs endroits en Algérie
+			<br />
+			Découvrez, évaluez et notez les commerces locaux
+		</h1>
+
+		<p class="mt-6 text-lg text-slate-200">
+			Découvrez les meilleurs restaurants, cafés, salons et bien plus encore. Lisez les avis, partagez vos
+			expériences et faites les meilleurs choix.
+		</p>
+
+		<!-- I will separate it in next commit with graph ql integration to be reusable  -->
+		<div class="mt-10 relative" [formGroup]="filterForm">
+			<mat-icon color="primary" class="absolute right-4 top-1/2 -translate-y-1/2" (click)="onSubmit()">
+				recherche
+			</mat-icon>
+			<div [formGroupName]="'filter'">
+				<div [formGroupName]="'displayName'">
+					<input
+						formControlName="value"
+						matInput
+						class="w-full pl-12 py-4 rounded-full text-black bg-white"
+						placeholder="Restaurants (et plus de catégories au future)" />
+					@if (displayNameValue.invalid && (displayNameValue.touched || displayNameValue.dirty)) {
+						<span class="text-sm text-red-500">
+							@if (displayNameValue.errors?.['minlength']) {
+								Doit comporter au moins 3 caractères
+							}
+						</span>
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

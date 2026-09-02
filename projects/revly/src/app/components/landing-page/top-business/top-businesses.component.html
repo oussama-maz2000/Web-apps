@@ -1,0 +1,104 @@
+<section class="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
+	<div class="max-w-7xl mx-auto">
+		<!-- Section Header -->
+		<div class="text-center mb-12">
+			<h2 class="text-4xl font-bold text-gray-900 mb-4">Meilleures Restaurants</h2>
+			<p class="text-lg text-gray-600 max-w-2xl mx-auto">
+				Découvrez les restaurants les plus populaires et les mieux notées dans votre région.
+			</p>
+		</div>
+
+		<!-- Business Cards Grid -->
+		<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+			@for (business of businesses(); track business.id) {
+				<article
+					(click)="navigateToBusiness(business.category.nameFr, business.id, business.displayName)"
+					class="rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col md:flex-row h-full cursor-pointer">
+					<!-- Left Column: Business Information -->
+					<div class="flex-1 p-8 flex flex-col justify-between">
+						<!-- Business Name -->
+						<div>
+							<h3 class="text-3xl font-bold text-gray-900 mb-4">
+								{{ business.displayName }}
+							</h3>
+
+							<!-- Rating -->
+							<div class="flex items-center gap-3 mb-8">
+								<span class="text-2xl font-bold text-yellow-400">
+									{{ business.rating.averageRating | number: '1.1-1' }}
+								</span>
+								<div class="flex text-yellow-400 text-2xl">
+									@for (star of [1, 2, 3, 4, 5]; track star) {
+										<span>{{ star <= business.rating.averageRating ? '★' : '☆' }}</span>
+									}
+								</div>
+							</div>
+
+							<!-- Category -->
+							<div class="flex items-center gap-3 text-gray-700 mb-5">
+								<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+								</svg>
+								<span class="font-semibold text-lg">{{ business.category.nameFr }}</span>
+							</div>
+
+							<!-- Location -->
+							<div class="flex items-center gap-3 text-gray-700 mb-5">
+								<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+								</svg>
+								<span class="font-semibold text-lg"> Emplacement</span>
+							</div>
+						</div>
+
+						<!-- Opening Hours & Status (Bottom) -->
+						<div>
+							<div class="flex items-center gap-3 mb-2">
+								<svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+								</svg>
+								<span class="text-gray-700 font-semibold text-lg">
+									{{ getOpeningHoursLabel(business.todayOpeningHours) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Right Column: Full Height Image -->
+					<div class="md:w-1/2 relative min-h-[250px] md:min-h-full overflow-hidden">
+						<div
+							[ngClass]="getStatusClass(business.openStatus)"
+							class="absolute top-4 right-4 z-10 px-4 py-1.5 rounded-full text-sm font-bold shadow-lg uppercase tracking-wider">
+							{{ getStatusLabel(business.openStatus) }}
+						</div>
+						@if (business.profilePicture?.url; as profilePictureUrl) {
+							<img
+								[alt]="business.displayName"
+								[src]="buildImageUrl(business.profilePicture?.url!, 'medium')"
+								class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 hover:scale-110" />
+						}
+
+						<div class="absolute inset-0 bg-black/5"></div>
+					</div>
+				</article>
+			}
+		</div>
+	</div>
+</section>

@@ -1,0 +1,54 @@
+<div class="main-wrapper">
+	<app-header>
+		<!-- <app-navbar [title]="navbarTitle"/>  dont mind this -->
+	</app-header>
+
+	<mat-sidenav-container class="sidenav-container">
+		<mat-sidenav #sidenav mode="over" class="sidenav" [opened]="isSideNavOpen()">
+			<mat-nav-list>
+				<h3 mat-subheader>General</h3>
+				<a mat-list-item routerLink="/home">
+					<mat-icon matListItemIcon fontIcon="home"></mat-icon>
+					Home
+				</a>
+
+				<a mat-list-item routerLink="/role-management">
+					<mat-icon matListItemIcon fontIcon="info"></mat-icon>
+					Role Management
+				</a>
+				<mat-divider></mat-divider>
+
+				<a mat-list-item routerLink="/claims-review">
+					<mat-icon matListItemIcon fontIcon="assignment_turned_in"></mat-icon>
+					Claims Review
+				</a>
+				<mat-divider></mat-divider>
+
+				<h3 mat-subheader>Settings</h3>
+				<a mat-list-item routerLink="/settings">
+					<mat-icon matListItemIcon fontIcon="settings"></mat-icon>
+					Settings
+				</a>
+
+				<a mat-list-item routerLink="/about">
+					<mat-icon matListItemIcon fontIcon="info"></mat-icon>
+					About
+				</a>
+
+				<a mat-list-item routerLink="/help">
+					<mat-icon matListItemIcon fontIcon="help"></mat-icon>
+					Help
+				</a>
+
+				<a mat-list-item routerLink="/contact">
+					<mat-icon matListItemIcon fontIcon="contact_mail"></mat-icon>
+					Contact Us
+				</a>
+			</mat-nav-list>
+		</mat-sidenav>
+
+		<mat-sidenav-content class="router-outlet-container">
+			<router-outlet />
+		</mat-sidenav-content>
+	</mat-sidenav-container>
+</div>

@@ -1,0 +1,74 @@
+<div class="container">
+	<div class="left">
+		<div class="overlay">
+			<h1>Découvrez et évaluez le meilleur en Algérie</h1>
+			<p>Trouvez les meilleurs restaurants, cafés, fast food,... autour de vous</p>
+		</div>
+	</div>
+
+	<div class="right">
+		<div class="auth-box">
+			<img src="/assets/revlib/logo.svg" alt="Revly Logo" class="logo" />
+			<h2>Connexion</h2>
+			<p>
+				Vous n'avez pas de compte ?
+				<a matButton color="accent" (click)="goToSignup()" aria-hidden="true">S'inscrire</a>
+			</p>
+
+			<!-- Backend messages -->
+			<app-revlib-backend-result [errorResult]="errorResult()" [successMessage]="successMessage()" />
+
+			<!-- LOGIN FORM -->
+			<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="form-container">
+				<div class="form-content">
+					<!-- Email Field -->
+					<mat-form-field appearance="fill" class="half">
+						<mat-icon matPrefix fontIcon="email"></mat-icon>
+						<mat-label>Email</mat-label>
+						<input
+							matInput
+							formControlName="email"
+							placeholder="email@example.com"
+							name="email"
+							autocomplete="email"
+							type="email" />
+
+						@if (emailControl?.hasError('required')) {
+							<mat-error>Email requis</mat-error>
+						}
+						@if (emailControl?.hasError('email') || emailControl?.hasError('pattern')) {
+							<mat-error>Email invalide</mat-error>
+						}
+					</mat-form-field>
+
+					<!-- Password Field -->
+					<app-revlib-password-field controlName="password" [fullWidth]="true" />
+
+					<!-- Forgot password link -->
+					<div class="forgot">
+						<a matButton [routerLink]="forgotPasswordLink">Mot de passe oublié ?</a>
+					</div>
+				</div>
+
+				<!-- Submit Button -->
+				<button
+					matButton="outlined"
+					color="accent"
+					class="auth-button"
+					[disabled]="loginForm.invalid || isLoading()"
+					type="submit">
+					@if (isLoading()) {
+						<mat-icon fontIcon="sync"></mat-icon>
+					}
+					Se connecter
+				</button>
+
+				<!-- Social Sign-in Section -->
+				<div class="divider">Ou se connecter avec</div>
+			</form>
+
+			<!-- Google Auth Button -->
+			<div id="google-signin-button" class="google-button-container"></div>
+		</div>
+	</div>
+</div>

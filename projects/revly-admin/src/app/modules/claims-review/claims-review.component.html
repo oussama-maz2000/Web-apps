@@ -1,0 +1,107 @@
+<div class="@container min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 md:p-8">
+	@if (currentClaim(); as claim) {
+		<div class="max-w-7xl mx-auto">
+			<div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200">
+				<div class="bg-gradient-to-r from-purple-600 to-purple-700 px-8 py-6">
+					<div class="flex items-center justify-between">
+						<div>
+							<h1 class="text-3xl font-bold text-white tracking-tight">Revue des réclamations</h1>
+							<p class="text-purple-100 mt-1 text-sm">Examiner et approuver les réclamations d’établissement</p>
+						</div>
+						<div class="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2">
+							<span class="text-white text-sm font-semibold">
+								{{ claims().length }} réclamation{{ claims().length !== 1 ? 's' : '' }} restante{{
+									claims().length !== 1 ? 's' : ''
+								}}
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="p-8">
+					<div class="mb-6">
+						<span
+							class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold"
+							[ngClass]="{
+								'bg-green-100 text-green-800': claim.status === 4,
+								'bg-yellow-100 text-yellow-800': claim.status === 1,
+								'bg-red-100 text-red-800': claim.status === 2,
+								'bg-gray-100 text-gray-800': claim.status !== 4 && claim.status !== 1 && claim.status !== 2
+							}">
+							<span
+								class="w-2 h-2 rounded-full mr-2"
+								[ngClass]="{
+									'bg-green-500': claim.status === 4,
+									'bg-yellow-500': claim.status === 1,
+									'bg-red-500': claim.status === 2,
+									'bg-gray-500': claim.status !== 4 && claim.status !== 1 && claim.status !== 2
+								}"></span>
+							{{ getStatusLabel(claim.status) }}
+						</span>
+					</div>
+
+					<div class="space-y-4">
+						<div class="flex flex-col sm:flex-row sm:items-center border-b border-slate-100 pb-4">
+							<span class="text-sm font-semibold text-slate-500 uppercase tracking-wide sm:w-48 mb-1 sm:mb-0">
+								ID
+							</span>
+							<span class="text-base text-slate-900 font-medium">{{ claim.id }}</span>
+						</div>
+						<div class="flex flex-col sm:flex-row sm:items-center border-b border-slate-100 pb-4">
+							<span class="text-sm font-semibold text-slate-500 uppercase tracking-wide sm:w-48 mb-1 sm:mb-0">
+								ID de l’entreprise
+							</span>
+							<span class="text-base text-slate-900 font-medium">{{ claim.businessId }}</span>
+						</div>
+						<div class="flex flex-col sm:flex-row sm:items-center border-b border-slate-100 pb-4">
+							<span class="text-sm font-semibold text-slate-500 uppercase tracking-wide sm:w-48 mb-1 sm:mb-0">
+								Téléphone de vérification
+							</span>
+							<span class="text-base text-slate-900 font-medium">{{ claim.verificationPhone }}</span>
+						</div>
+						<div class="flex flex-col sm:flex-row sm:items-center border-b border-slate-100 pb-4">
+							<span class="text-sm font-semibold text-slate-500 uppercase tracking-wide sm:w-48 mb-1 sm:mb-0">
+								Statut
+							</span>
+							<span class="text-base text-slate-900 font-medium">{{ getStatusLabel(claim.status) }}</span>
+						</div>
+						@if (claim.rejectionReason !== null && claim.rejectionReason !== undefined) {
+							<div class="flex flex-col sm:flex-row sm:items-start border-b border-slate-100 pb-4">
+								<span class="text-sm font-semibold text-slate-500 uppercase tracking-wide sm:w-48 mb-1 sm:mb-0">
+									Motif de rejet
+								</span>
+								<span class="text-base text-slate-900 font-medium">
+									{{ getRejectionReason(claim.rejectionReason) }}
+								</span>
+							</div>
+						}
+					</div>
+					<div class="mt-8 flex justify-end">
+						<button
+							(click)="openClaimsReviewDialog()"
+							type="button"
+							class="group relative px-8 py-3.5 bg-gradient-to-r from-purple-600 to-purple-700 text-white font-semibold text-base rounded-xl shadow-lg hover:shadow-xl hover:from-purple-700 hover:to-purple-800 active:scale-95 transition-all duration-200 ease-out overflow-hidden">
+							<span class="relative z-10 flex items-center justify-center gap-2">
+								Examiner & approuver
+								<mat-icon fontIcon="check_circle"></mat-icon>
+							</span>
+							<div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity"></div>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	} @else {
+		<div class="max-w-2xl mx-auto text-center py-16">
+			<div class="bg-white rounded-2xl shadow-lg p-12 border border-slate-200">
+				<div class="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6">
+					<mat-icon class="!text-5xl !w-12 !h-12 text-slate-400" fontIcon="inbox"></mat-icon>
+				</div>
+				<h2 class="text-2xl font-bold text-slate-800 mb-2">Aucune réclamation disponible</h2>
+				<p class="text-slate-600">
+					Toutes les réclamations ont été examinées. Revenez plus tard pour de nouvelles soumissions.
+				</p>
+			</div>
+		</div>
+	}
+</div>

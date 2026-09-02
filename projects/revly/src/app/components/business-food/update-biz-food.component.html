@@ -1,0 +1,168 @@
+<div class="max-w-4xl mx-auto p-6">
+	<!-- Header -->
+	<mat-card appearance="outlined" class="bg-gradient-to-br from-sky-600 to-sky-800 text-white overflow-hidden">
+		<mat-card-content class="p-4">
+			<mat-card-header>
+				<div>
+					<mat-card-title class="text-3xl font-extrabold mb-3"
+						>Mettre à jour les informations Food de l’établissement</mat-card-title
+					>
+					<mat-card-subtitle>
+						<p class="font-medium text-white">
+							Gérez les services, les équipements et la capacité de votre restaurant
+						</p>
+					</mat-card-subtitle>
+				</div>
+			</mat-card-header>
+		</mat-card-content>
+	</mat-card>
+
+	<!-- Form -->
+	<form [formGroup]="bizFoodForm" (ngSubmit)="onSubmit()" class="flex flex-col space-y-4 mt-4">
+		<!-- Services & Payments -->
+		<mat-card appearance="outlined">
+			<mat-card-content class="p-6">
+				<div class="flex items-center gap-4 mb-6">
+					<div class="p-3 bg-indigo-50 rounded-2xl text-indigo-600">
+						<mat-icon>restaurant</mat-icon>
+					</div>
+					<h3 class="text-xl font-bold text-gray-900">Services & paiements</h3>
+					<div class="flex-1 h-px bg-gray-100"></div>
+				</div>
+
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+					<div class="flex flex-col space-y-4">
+						<mat-slide-toggle formControlName="acceptsCardPayment" color="primary">
+							Accepte le paiement par carte
+						</mat-slide-toggle>
+						<mat-slide-toggle formControlName="acceptsDelivery" color="primary">
+							Propose la livraison
+						</mat-slide-toggle>
+						<mat-slide-toggle formControlName="acceptsReservations" color="primary">
+							Accepte les réservations
+						</mat-slide-toggle>
+					</div>
+
+					<div class="space-y-4">
+						<mat-form-field class="w-full">
+							<mat-label>Rayon de livraison (Km)</mat-label>
+							<input matInput type="number" formControlName="deliveryRadiusKm" placeholder="e.g. 5000" />
+							<mat-icon matSuffix>map</mat-icon>
+						</mat-form-field>
+					</div>
+				</div>
+			</mat-card-content>
+		</mat-card>
+
+		<!-- Facilities -->
+		<mat-card appearance="outlined">
+			<mat-card-content class="p-6">
+				<div class="flex items-center gap-4 mb-6">
+					<div class="p-3 bg-amber-50 rounded-2xl text-amber-600">
+						<mat-icon>meeting_room</mat-icon>
+					</div>
+					<h3 class="text-xl font-bold text-gray-900">Équipements & capacité</h3>
+					<div class="flex-1 h-px bg-gray-100"></div>
+				</div>
+
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+					<div class="flex flex-col space-y-4">
+						<mat-slide-toggle formControlName="hasFamilyRoom" color="primary">
+							Dispose d’une salle familiale
+						</mat-slide-toggle>
+						<mat-slide-toggle formControlName="hasWifiGuests" color="primary">
+							Wi-Fi disponible pour les clients
+						</mat-slide-toggle>
+						<mat-slide-toggle formControlName="isBanquetOrganizer" color="primary">
+							Organise des banquets
+						</mat-slide-toggle>
+						<mat-slide-toggle formControlName="isBirthdayOrganizer" color="primary">
+							Organise des anniversaires
+						</mat-slide-toggle>
+					</div>
+
+					<div class="space-y-4">
+						<mat-form-field class="w-full">
+							<mat-label>Capacité d’accueil</mat-label>
+							<input matInput type="number" formControlName="seatingCapacity" placeholder="e.g. 50" />
+							<mat-icon matSuffix>people</mat-icon>
+						</mat-form-field>
+					</div>
+				</div>
+			</mat-card-content>
+		</mat-card>
+
+		<!-- Menu & Tags -->
+		<!-- <mat-card appearance="outlined">
+			<mat-card-content class="p-6">
+				<div class="flex items-center gap-4 mb-6">
+					<div class="p-3 bg-emerald-50 rounded-2xl text-emerald-600">
+						<mat-icon>menu_book</mat-icon>
+					</div>
+					<h3 class="text-xl font-bold text-gray-900">Menu & Cuisine</h3>
+					<div class="flex-1 h-px bg-gray-100"></div>
+				</div>
+
+				<div class="space-y-4">
+					<mat-form-field class="w-full">
+						<mat-label>Menu URL or Description</mat-label>
+						<textarea
+							matInput
+							formControlName="menu"
+							rows="3"
+							placeholder="Link to your menu or a brief description..."></textarea>
+					</mat-form-field>
+
+					<mat-form-field class="w-full">
+						<mat-label>Cuisine Tags (JSON)</mat-label>
+						<input matInput formControlName="cuisineTagsJson" placeholder='e.g. ["Italian", "Pizza"]' />
+						<mat-hint>Enter tags as a JSON array</mat-hint>
+					</mat-form-field>
+				</div>
+			</mat-card-content>
+		</mat-card> -->
+
+		<!-- Backend Results -->
+		<div class="px-2">
+			<app-revlib-backend-result
+				[errorResult]="errorResult()"
+				[successMessage]="successMessage()"></app-revlib-backend-result>
+		</div>
+
+		<!-- Actions -->
+		<div class="flex flex-col sm:flex-row justify-end items-center gap-4">
+			<button
+				matButton
+				type="button"
+				(click)="onCancel()"
+				class="px-8 py-3 text-gray-500 font-semibold hover:bg-gray-100 rounded-xl transition-colors">
+				Annuler les modifications
+			</button>
+			<button
+				matButton="filled"
+				color="primary"
+				type="submit"
+				[disabled]="isLoading()"
+				class="w-full sm:w-auto px-12 py-7 text-lg font-bold rounded-2xl transition-all hover:scale-[1.02] active:scale-[0.98] bg-indigo-600 hover:bg-indigo-700">
+				@if (isLoading()) {
+					<div class="flex items-center gap-3">
+						<svg
+							class="animate-spin h-6 w-6 text-white"
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24">
+							<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+							<path
+								class="opacity-75"
+								fill="currentColor"
+								d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+						</svg>
+						<span>Mise à jour en cours...</span>
+					</div>
+				} @else {
+					Enregistrer les modifications
+				}
+			</button>
+		</div>
+	</form>
+</div>

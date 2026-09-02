@@ -1,0 +1,48 @@
+<h2 mat-dialog-title>Confirmation de l'OTP</h2>
+<mat-dialog-content>
+	<p>{{ data.message }}</p>
+	<form [formGroup]="otpForm" (ngSubmit)="onOtpConfirm()">
+		<mat-form-field>
+			<mat-label>Code de vérification</mat-label>
+			<input
+				matInput
+				formControlName="otp"
+				placeholder="######"
+				maxlength="6"
+				inputmode="numeric"
+				pattern="[0-9]{6}" />
+			<mat-hint align="end"> {{ 3 - remainingAttempts() }} / 3</mat-hint>
+
+			@if (otpForm.get('otp')?.invalid && otpForm.get('otp')?.touched) {
+				<mat-error>Veuillez saisir un code à 6 chiffres valide</mat-error>
+			}
+		</mat-form-field>
+
+		<div class="resend-section">
+			@if (countdownSeconds() > 0) {
+				<span class="countdown-text"> Renvoyer le code dans {{ countdownSeconds() }} secondes </span>
+			}
+
+			<button type="button" matButton color="primary" [disabled]="canResend()" (click)="resendOtp()">
+				Renvoyer le code
+			</button>
+		</div>
+	</form>
+
+	<!-- Backend messages -->
+	<app-revlib-backend-result [errorResult]="errorResult()" [successMessage]="successMessage()">
+	</app-revlib-backend-result>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+	<button matButton color="primary" mat-dialog-close [disabled]="isLoading()">Annuler</button>
+
+	<button
+		mat-raised-button
+		color="primary"
+		type="submit"
+		[disabled]="isSubmitDisabled() || this.otpForm.invalid"
+		(click)="onOtpConfirm()">
+		Confirmer
+	</button>
+</mat-dialog-actions>

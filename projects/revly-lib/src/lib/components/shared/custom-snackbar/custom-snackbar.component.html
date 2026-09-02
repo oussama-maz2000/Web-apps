@@ -1,0 +1,22 @@
+<div class="snackbar-content">
+	<div class="snackbar-icon-message">
+		<mat-icon [attr.aria-label]="data.type + ' icon'">{{ config.icon }}</mat-icon>
+		<span class="snackbar-message">{{ data.message }}</span>
+	</div>
+	<div class="snackbar-actions">
+		@if (data.action) {
+			<button
+				matButton
+				class="snackbar-action-btn"
+				(click)="executeAction()"
+				[attr.aria-label]="data.action.label">
+				{{ data.action.label }}
+			</button>
+		}
+		@if (data.dismissible) {
+			<button mat-icon-button class="snackbar-close-btn" (click)="dismiss()" aria-label="Close notification">
+				<mat-icon>close</mat-icon>
+			</button>
+		}
+	</div>
+</div>

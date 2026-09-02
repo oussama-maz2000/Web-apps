@@ -1,0 +1,49 @@
+// ============================================
+// REVIEW COMPONENTS - GLOBAL STYLES
+// ============================================
+
+// Star Rating Colors
+$star-empty-color: #e0e0e0; // Light gray for empty stars
+$star-gold-color: #ffc107; // Gold for 4-5 stars
+$star-yellow-color: #ff8400; // Yellow for 2-3 stars
+$star-red-color: #e53935; // Red for 1 star
+
+// Review Stars Component - Target mat-icon specifically
+.star-empty {
+	color: $star-empty-color !important;
+}
+
+.star-gold {
+	color: $star-gold-color !important;
+}
+
+.star-yellow {
+	color: $star-yellow-color !important;
+}
+
+.star-red {
+	color: $star-red-color !important;
+}
+
+// Review Display Component
+revlib-review-display {
+	display: block;
+
+	.mat-card {
+		height: 100%;
+	}
+
+	.flex.gap-3 {
+		align-items: flex-start;
+	}
+}
+
+// Review Form Component
+revlib-review-form {
+	display: block;
+}
+
+// Review Container Component
+revlib-review {
+	display: block;
+}

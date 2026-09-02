@@ -1,0 +1,61 @@
+<form [formGroup]="form()">
+	<div class="space-y-6">
+		<!-- Barre de recherche + géolocalisation -->
+		<div class="flex flex-col sm:flex-row gap-3">
+			<input
+				#searchInput
+				type="text"
+				placeholder="Rechercher une adresse ou un lieu..."
+				class="flex-1 px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 text-base"
+				(keyup.enter)="searchAddress()" />
+
+			<button mat-raised-button color="primary" (click)="searchAddress()" class="px-6">Rechercher</button>
+
+			<button matButton (click)="useCurrentLocation()" [disabled]="locating()" class="px-6 whitespace-nowrap">
+				@if (locating()) {
+					<mat-spinner diameter="20"></mat-spinner>
+				} @else {
+					<mat-icon>my_location</mat-icon>
+				}
+				Ma position
+			</button>
+		</div>
+
+		<!-- Adresse complète éditable -->
+		<mat-form-field class="w-full">
+			<mat-label>Adresse complète</mat-label>
+			<input matInput formControlName="fullAddress" placeholder="Ex: 123 Rue Principale, Alger Centre" />
+			<mat-hint>Remplie automatiquement · Modifiable pour ajouter des précisions</mat-hint>
+		</mat-form-field>
+
+		<!-- Info position -->
+		@if (selectedAddress()) {
+			<div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+				<p class="font-medium text-blue-900 mb-1">Position détectée :</p>
+				<p class="text-blue-800 text-sm">{{ selectedAddress() }}</p>
+				<p class="text-blue-700 text-xs mt-2">
+					Lat: {{ form().value.latitude | number: '1.6-6' }} | Lng: {{ form().value.longitude | number: '1.6-6' }}
+				</p>
+			</div>
+		} @else if (form().value.latitude && form().value.longitude) {
+			<div class="bg-gray-100 border border-gray-300 rounded-lg p-4">
+				<p class="text-gray-700 text-sm">
+					Position : Lat {{ form().value.latitude | number: '1.6-6' }}, Lng
+					{{ form().value.longitude | number: '1.6-6' }}
+				</p>
+			</div>
+		} @else {
+			<div class="text-center py-8 text-gray-500">
+				Cliquez sur la carte ou recherchez pour sélectionner un emplacement
+			</div>
+		}
+
+		<!-- Carte Leaflet -->
+		<div #mapContainer class="h-96 rounded-lg overflow-hidden shadow-xl border border-gray-300"></div>
+
+		<p class="text-sm text-gray-600 text-center mt-4">
+			<mat-icon class="text-base align-middle">info</mat-icon>
+			Cliquez sur la carte pour ajuster précisément la position
+		</p>
+	</div>
+</form>

@@ -1,0 +1,43 @@
+<div [formGroup]="form()">
+	<mat-form-field class="w-full">
+		<mat-label>Lien Google Maps</mat-label>
+		<input matInput formControlName="googleMaps" placeholder="https://maps.google.com/..." />
+		@if (form().get('googleMaps')?.hasError('invalidUrl')) {
+			<mat-error>Lien invalide</mat-error>
+		}
+		@if (form().get('googleMaps')?.hasError('required')) {
+			<mat-error>Obligatoire</mat-error>
+		}
+	</mat-form-field>
+
+	<mat-form-field class="w-full">
+		<mat-label>Facebook</mat-label>
+		<input matInput formControlName="facebook" placeholder="https://facebook.com/..." />
+		@if (form().get('facebook')?.hasError('invalidUrl')) {
+			<mat-error>Lien invalide</mat-error>
+		}
+	</mat-form-field>
+
+	<mat-form-field class="w-full">
+		<mat-label>Instagram</mat-label>
+		<input matInput formControlName="instagram" placeholder="https://instagram.com/..." />
+		@if (form().get('instagram')?.hasError('invalidUrl')) {
+			<mat-error>Lien invalide</mat-error>
+		}
+	</mat-form-field>
+
+	<mat-form-field class="w-full">
+		<mat-label>Site web</mat-label>
+		<input matInput formControlName="website" placeholder="https://www.example.com" />
+		@if (form().get('website')?.hasError('invalidUrl')) {
+			<mat-error>Lien invalide</mat-error>
+		}
+	</mat-form-field>
+
+	<!-- Erreur globale : au moins un lien requis -->
+	@if (hasAtLeastOneError()) {
+		<div class="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+			<p class="text-red-800 text-sm font-medium">Vous devez fournir au moins le lien d'un réseau social.</p>
+		</div>
+	}
+</div>

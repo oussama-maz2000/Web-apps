@@ -1,0 +1,20 @@
+{
+	"files.eol": "\n",
+	"files.insertFinalNewline": true,
+	"files.trimTrailingWhitespace": true,
+
+	"eslint.workingDirectories": [
+		{
+			"pattern": "./projects/*",
+			"changeProcessCWD": true
+		}
+	],
+	"eslint.validate": ["javascript", "typescript", "html"],
+	"eslint.useFlatConfig": true,
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": "explicit"
+	},
+	//enable lint errors workspace wide, could be resource consuming
+	"eslint.lintTask.enable": true,
+	"eslint.run": "onSave"
+}

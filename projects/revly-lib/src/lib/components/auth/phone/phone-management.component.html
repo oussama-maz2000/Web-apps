@@ -1,0 +1,89 @@
+@if (isVerified()) {
+	<mat-expansion-panel class="mb-3 shadow-none border border-gray-200 rounded-lg">
+		<mat-expansion-panel-header>
+			<mat-panel-title class="text-sm">
+				<mat-icon class="text-blue-500 mr-2 flex items-center" style="font-size: 20px">edit</mat-icon>
+				Modifier le numéro de téléphone
+			</mat-panel-title>
+		</mat-expansion-panel-header>
+		<div class="p-4 bg-gray-50">
+			<form [formGroup]="phoneChangeForm" (ngSubmit)="onPhoneVerify()">
+				<h4>Mettre à jour votre numéro de téléphone</h4>
+				<mat-form-field floatLabel="always" class="w-full">
+					<mat-label>Nouveau numéro de téléphone</mat-label>
+					<span matTextPrefix>+213 &nbsp;</span>
+					<input
+						matInput
+						type="tel"
+						inputmode="numeric"
+						maxlength="9"
+						formControlName="phoneNumber"
+						placeholder="### ## ## ##" />
+					<mat-icon matSuffix>phone</mat-icon>
+					@if (phoneControl?.hasError('required')) {
+						<mat-error>Ce champ est requis</mat-error>
+					}
+
+					@if (phoneControl?.hasError('invalidPhoneNumber')) {
+						<mat-error>Numéro de téléphone invalide</mat-error>
+					}
+
+					@if (phoneControl?.hasError('sameAsCurrent')) {
+						<mat-error>Le nouveau numéro de téléphone est identique à l'actuel</mat-error>
+					}
+				</mat-form-field>
+
+				<!-- password -->
+				<app-revlib-password-field [fullWidth]="true" controlName="password" label="Mot de passe" />
+
+				<button
+					[disabled]="phoneChangeForm.invalid || isLoading()"
+					matButton="filled"
+					color="accent"
+					type="submit">
+					Vérifier
+				</button>
+			</form>
+		</div>
+	</mat-expansion-panel>
+} @else {
+	<mat-expansion-panel class="mb-3 shadow-none border border-gray-200 rounded-lg">
+		<mat-expansion-panel-header>
+			<mat-panel-title class="text-sm">
+				<mat-icon class="text-blue-500 mr-2 flex items-center" style="font-size: 20px">edit</mat-icon>
+				Ajouter un numéro de téléphone
+			</mat-panel-title>
+		</mat-expansion-panel-header>
+		<div class="p-4 bg-gray-50">
+			<form [formGroup]="phoneAddForm" (ngSubmit)="onPhoneVerify()">
+				<mat-form-field floatLabel="always">
+					<mat-label>Numéro de téléphone</mat-label>
+					<span matTextPrefix>+213 &nbsp;</span>
+					<input
+						matInput
+						type="tel"
+						inputmode="numeric"
+						maxlength="9"
+						formControlName="phoneNumber"
+						placeholder="### ## ## ##" />
+					<mat-icon matSuffix>phone</mat-icon>
+					@if (phoneControl?.hasError('required')) {
+						<mat-error>Ce champ est requis</mat-error>
+					}
+
+					@if (phoneControl?.hasError('invalidPhoneNumber')) {
+						<mat-error>Numéro de téléphone invalide</mat-error>
+					}
+				</mat-form-field>
+
+				<button [disabled]="phoneAddForm.invalid || isLoading()" matButton="filled" color="accent" type="submit">
+					Vérifier
+				</button>
+			</form>
+		</div>
+	</mat-expansion-panel>
+}
+
+<!-- Backend messages -->
+<app-revlib-backend-result [errorResult]="errorResult()" [successMessage]="successMessage()">
+</app-revlib-backend-result>

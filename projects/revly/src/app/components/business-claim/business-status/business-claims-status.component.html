@@ -1,0 +1,109 @@
+<!-- business-claims-status.component.html -->
+<div class="max-w-5xl mx-auto p-4 sm:p-6">
+	<h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-8">Mes demandes de revendication</h2>
+
+	<!-- Loading state -->
+	@if (isLoading()) {
+		<div class="flex justify-center py-16">
+			<mat-spinner diameter="56"></mat-spinner>
+		</div>
+	}
+
+	<!-- Empty state -->
+	@else if (claims().length === 0) {
+		<div class="text-center py-16 bg-gray-50 rounded-xl border border-gray-200">
+			<svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="1.5"
+					d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+			</svg>
+			<p class="text-lg text-gray-600">Aucune demande de revendication pour le moment.</p>
+		</div>
+	}
+
+	<!-- Claims list -->
+	@else {
+		<div class="space-y-6">
+			@for (claim of claims(); track claim.id) {
+				<mat-card class="shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+					<mat-card-content class="p-6">
+						<div class="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-6">
+							<!-- Left: Status + Details -->
+							<div class="flex-1 space-y-5">
+								<!-- Status chips -->
+								<div class="flex flex-wrap items-center gap-3">
+									<!-- Main status -->
+									<span
+										class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap
+                           {{ claim.status | businessClaimStatusClass }}">
+										{{ claim.status | businessClaimStatusLabel }}
+									</span>
+
+									<!-- Rejection reason (only if rejected and reason ≠ default 0) -->
+									@if (claim.status === BusinessClaimStatus.Rejected && claim.rejectionReason !== 0) {
+										<span
+											class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-red-100 text-red-800">
+											{{ claim.rejectionReason | claimRejectionReasonLabel }}
+										</span>
+									}
+
+									<!-- Special message for "Other" reason -->
+									@if (
+										claim.status === BusinessClaimStatus.Rejected && claim.rejectionReason === RejectonReason.Other
+									) {
+										<span class="text-xs text-red-700 italic">
+											Une raison personnalisée a été fournie par l'administrateur.
+										</span>
+									}
+								</div>
+
+								<!-- Claim details -->
+								<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-700">
+									<div>
+										<span class="font-medium text-gray-900">Téléphone de vérification :</span>
+										<span class="ml-2">{{ claim.verificationPhone }}</span>
+									</div>
+									<div>
+										<span class="font-medium text-gray-900">Soumise le :</span>
+										<span class="ml-2">{{ claim.createdAt | date: 'dd MMM yyyy à HH:mm' }}</span>
+									</div>
+								</div>
+							</div>
+
+							<!-- Right: ID + Actions -->
+							<div class="flex flex-col items-end gap-4">
+								<!-- Claim ID + Copy -->
+								<div class="text-right">
+									<p class="text-xs text-gray-500 mb-1">ID de la demande</p>
+									<div class="flex items-center gap-2">
+										<code class="text-xs font-mono bg-gray-100 px-3 py-1.5 rounded">
+											{{ claim.id }}
+										</code>
+										<button mat-icon-button (click)="copyClaimId(claim.id)" [attr.aria-label]="'Copier l\'ID'">
+											<mat-icon class="text-gray-600">content_copy</mat-icon>
+										</button>
+									</div>
+								</div>
+
+								<!-- Cancel button – only for cancelable statuses -->
+								@if (
+									[
+										BusinessClaimStatus.PendingModeration,
+										BusinessClaimStatus.InReview,
+										BusinessClaimStatus.AwaitingOtpVerification
+									].includes(claim.status)
+								) {
+									<button matButton color="warn" class="min-w-40" (click)="openCancelDialog(claim)">
+										Annuler la demande
+									</button>
+								}
+							</div>
+						</div>
+					</mat-card-content>
+				</mat-card>
+			}
+		</div>
+	}
+</div>

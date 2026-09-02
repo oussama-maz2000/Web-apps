@@ -1,0 +1,294 @@
+{
+	"cli": {
+		"schematicCollections": ["angular-eslint", "@ngrx/schematics"]
+	},
+	"$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+	"version": 1,
+	"newProjectRoot": "projects",
+	"projects": {
+		"revly-admin": {
+			"projectType": "application",
+			"schematics": {
+				"@schematics/angular:component": {
+					"style": "scss",
+					"standalone": false
+				},
+				"@schematics/angular:directive": {
+					"standalone": false
+				},
+				"@schematics/angular:pipe": {
+					"standalone": false
+				}
+			},
+			"root": "projects/revly-admin",
+			"sourceRoot": "projects/revly-admin/src",
+			"prefix": "app",
+			"architect": {
+				"build": {
+					"builder": "@angular/build:application",
+					"options": {
+						"outputPath": "dist/revly-admin",
+						"index": "projects/revly-admin/src/index.html",
+						"browser": "projects/revly-admin/src/main.ts",
+						"polyfills": ["zone.js"],
+						"tsConfig": "projects/revly-admin/tsconfig.app.json",
+						"inlineStyleLanguage": "scss",
+						"assets": [
+							{
+								"glob": "**/*",
+								"input": "projects/revly-admin/public"
+							},
+							{
+								"glob": "**/*",
+								"input": "projects/revly-lib/src/lib/public",
+								"output": "/assets/revlib"
+							}
+						],
+						"styles": ["projects/revly-admin/src/styles.scss"],
+						"stylePreprocessorOptions": {
+							"includePaths": ["projects/revly-lib/src/lib/styles"]
+						},
+						"scripts": []
+					},
+					"configurations": {
+						"production": {
+							"budgets": [
+								{
+									"type": "initial",
+									"maximumWarning": "500kB",
+									"maximumError": "1MB"
+								},
+								{
+									"type": "anyComponentStyle",
+									"maximumWarning": "4kB",
+									"maximumError": "8kB"
+								}
+							],
+							"outputHashing": "all"
+						},
+						"development": {
+							"optimization": false,
+							"extractLicenses": false,
+							"sourceMap": true
+						}
+					},
+					"defaultConfiguration": "production"
+				},
+				"serve": {
+					"builder": "@angular/build:dev-server",
+					"configurations": {
+						"production": {
+							"buildTarget": "revly-admin:build:production"
+						},
+						"development": {
+							"buildTarget": "revly-admin:build:development"
+						}
+					},
+					"defaultConfiguration": "development"
+				},
+				"extract-i18n": {
+					"builder": "@angular/build:extract-i18n"
+				},
+				"test": {
+					"builder": "@angular/build:karma",
+					"options": {
+						"polyfills": ["zone.js", "zone.js/testing"],
+						"tsConfig": "projects/revly-admin/tsconfig.spec.json",
+						"inlineStyleLanguage": "scss",
+						"assets": [
+							{
+								"glob": "**/*",
+								"input": "projects/revly-admin/public"
+							},
+							{
+								"glob": "**/*",
+								"input": "projects/revly-lib/src/lib/public",
+								"output": "/assets/revlib"
+							}
+						],
+						"styles": ["projects/revly-admin/src/styles.scss"],
+						"scripts": []
+					}
+				}
+			}
+		},
+		"revly": {
+			"projectType": "application",
+			"schematics": {
+				"@schematics/angular:component": {
+					"style": "scss",
+					"standalone": false
+				},
+				"@schematics/angular:directive": {
+					"standalone": false
+				},
+				"@schematics/angular:pipe": {
+					"standalone": false
+				}
+			},
+			"root": "projects/revly",
+			"sourceRoot": "projects/revly/src",
+			"prefix": "app",
+			"architect": {
+				"build": {
+					"builder": "@angular/build:application",
+					"options": {
+						"allowedCommonJsDependencies": ["leaflet"],
+						"outputPath": "dist/revly",
+						"index": "projects/revly/src/index.html",
+						"browser": "projects/revly/src/main.ts",
+						"polyfills": ["zone.js"],
+						"tsConfig": "projects/revly/tsconfig.app.json",
+						"inlineStyleLanguage": "scss",
+						"assets": [
+							{
+								"glob": "**/*",
+								"input": "projects/revly/public"
+							},
+							{
+								"glob": "**/*",
+								"input": "projects/revly-lib/src/lib/public",
+								"output": "/assets/revlib"
+							}
+						],
+						"styles": ["node_modules/leaflet/dist/leaflet.css", "projects/revly/src/styles.scss"],
+						"stylePreprocessorOptions": {
+							"includePaths": ["projects/revly-lib/src/lib/styles"]
+						},
+						"scripts": [],
+						"server": "projects/revly/src/main.server.ts",
+						"outputMode": "server",
+						"ssr": {
+							"entry": "projects/revly/src/server.ts"
+						}
+					},
+					"configurations": {
+						"production": {
+							"allowedCommonJsDependencies": ["leaflet"],
+							"budgets": [
+								{
+									"type": "initial",
+									"maximumWarning": "1mb",
+									"maximumError": "2mb"
+								},
+								{
+									"type": "anyComponentStyle",
+									"maximumWarning": "4kB",
+									"maximumError": "8kB"
+								}
+							],
+							"outputHashing": "all"
+						},
+						"development": {
+							"optimization": false,
+							"extractLicenses": false,
+							"sourceMap": true
+						}
+					},
+					"defaultConfiguration": "production"
+				},
+				"serve": {
+					"builder": "@angular/build:dev-server",
+					"configurations": {
+						"production": {
+							"buildTarget": "revly:build:production"
+						},
+						"development": {
+							"buildTarget": "revly:build:development"
+						}
+					},
+					"defaultConfiguration": "development"
+				},
+				"extract-i18n": {
+					"builder": "@angular/build:extract-i18n"
+				},
+				"test": {
+					"builder": "@angular/build:karma",
+					"options": {
+						"polyfills": ["zone.js", "zone.js/testing"],
+						"tsConfig": "projects/revly/tsconfig.spec.json",
+						"inlineStyleLanguage": "scss",
+						"assets": [
+							{
+								"glob": "**/*",
+								"input": "projects/revly/public"
+							}
+						],
+						"styles": ["projects/revly/src/styles.scss"],
+						"scripts": []
+					}
+				},
+				"lint": {
+					"builder": "@angular-eslint/builder:lint",
+					"options": {
+						"lintFilePatterns": ["projects/revly/**/*.ts", "projects/revly/**/*.html"],
+						"eslintConfig": "projects/revly/eslint.config.js"
+					}
+				}
+			}
+		},
+		"revly-lib": {
+			"projectType": "library",
+			"root": "projects/revly-lib",
+			"sourceRoot": "projects/revly-lib/src",
+			"prefix": "revlib",
+			"architect": {
+				"build": {
+					"builder": "@angular/build:ng-packagr",
+					"options": {
+						"project": "projects/revly-lib/ng-package.json"
+					},
+					"configurations": {
+						"production": {
+							"tsConfig": "projects/revly-lib/tsconfig.lib.prod.json"
+						},
+						"development": {
+							"tsConfig": "projects/revly-lib/tsconfig.lib.json"
+						}
+					},
+					"defaultConfiguration": "production"
+				},
+				"test": {
+					"builder": "@angular/build:karma",
+					"options": {
+						"tsConfig": "projects/revly-lib/tsconfig.spec.json",
+						"polyfills": ["zone.js", "zone.js/testing"]
+					}
+				},
+				"lint": {
+					"builder": "@angular-eslint/builder:lint",
+					"options": {
+						"lintFilePatterns": ["projects/revly-lib/**/*.ts", "projects/revly-lib/**/*.html"],
+						"eslintConfig": "projects/revly-lib/eslint.config.js"
+					}
+				}
+			}
+		}
+	},
+	"schematics": {
+		"@schematics/angular:component": {
+			"type": "component"
+		},
+		"@schematics/angular:directive": {
+			"type": "directive"
+		},
+		"@schematics/angular:service": {
+			"type": "service"
+		},
+		"@schematics/angular:guard": {
+			"typeSeparator": "."
+		},
+		"@schematics/angular:interceptor": {
+			"typeSeparator": "."
+		},
+		"@schematics/angular:module": {
+			"typeSeparator": "."
+		},
+		"@schematics/angular:pipe": {
+			"typeSeparator": "."
+		},
+		"@schematics/angular:resolver": {
+			"typeSeparator": "."
+		}
+	}
+}

@@ -1,0 +1,298 @@
+<div class="max-w-7xl mx-auto p-6 bg-white rounded-lg shadow-sm">
+	<div class="mb-6">
+		<h2 class="text-2xl font-bold text-gray-900 mb-4">Avis (Nombre total: {{ reviewsList().length }})</h2>
+
+		<form [formGroup]="queryForm" class="max-w-7xl mx-auto space-y-8 p-6">
+			<!-- Filters Section -->
+			<div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+				<div class="bg-gradient-to-r from-indigo-500 to-purple-600 px-6 py-4">
+					<h3 class="text-lg font-bold text-white flex items-center gap-2">
+						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+						</svg>
+						Filtres
+					</h3>
+				</div>
+
+				<div formGroupName="filter" class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+					<!-- Pinned Filter -->
+					<div formGroupName="isPinned" class="space-y-2">
+						<label for="pinned" class="block text-sm font-semibold text-gray-700"> Statut épinglé </label>
+						<div class="relative">
+							<select
+								id="pinned"
+								formControlName="value"
+								class="block w-full px-4 py-2.5 pr-10 text-sm text-gray-700 bg-gray-50 border border-gray-300 rounded-lg appearance-none cursor-pointer transition-all duration-200 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent focus:bg-white">
+								<option [ngValue]="null">Tous les articles</option>
+								<option [ngValue]="true">✓ Épinglé</option>
+								<option [ngValue]="false">○ Non épinglé</option>
+							</select>
+							<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+								<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+								</svg>
+							</div>
+						</div>
+					</div>
+
+					<!-- Rating Filter -->
+					<div formGroupName="rating" class="space-y-2">
+						<label for="rating" class="block text-sm font-semibold text-gray-700"> Évaluation </label>
+						<div class="relative">
+							<select
+								id="rating"
+								formControlName="value"
+								class="block w-full px-4 py-2.5 pr-10 text-sm text-gray-700 bg-gray-50 border border-gray-300 rounded-lg appearance-none cursor-pointer transition-all duration-200 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent focus:bg-white">
+								<option [ngValue]="5">★★★★★ (5 étoiles)</option>
+								<option [ngValue]="4">★★★★☆ (4 étoiles)</option>
+								<option [ngValue]="3">★★★☆☆ (3 étoiles)</option>
+								<option [ngValue]="2">★★☆☆☆ (2 étoiles)</option>
+								<option [ngValue]="1">★☆☆☆☆ (1 étoile)</option>
+							</select>
+							<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+								<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+								</svg>
+							</div>
+						</div>
+					</div>
+
+					<!-- Business Reply Filter -->
+					<div formGroupName="hasBusinessReply" class="space-y-2">
+						<label for="reply" class="block text-sm font-semibold text-gray-700"> Réponse commerciale </label>
+						<div class="relative">
+							<select
+								id="reply"
+								formControlName="value"
+								class="block w-full px-4 py-2.5 pr-10 text-sm text-gray-700 bg-gray-50 border border-gray-300 rounded-lg appearance-none cursor-pointer transition-all duration-200 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent focus:bg-white">
+								<option [ngValue]="null">Tous les avis</option>
+								<option [ngValue]="true">💬 Avec réponse</option>
+								<option [ngValue]="false">○ Sans réponse</option>
+							</select>
+							<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+								<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+								</svg>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Order Section -->
+			<div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+				<div class="bg-gradient-to-r from-purple-500 to-pink-600 px-6 py-4">
+					<h3 class="text-lg font-bold text-white flex items-center gap-2">
+						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path>
+						</svg>
+						Ordre de tri
+					</h3>
+				</div>
+
+				<div formGroupName="order" class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+					<!-- Pinned Order -->
+					<div formGroupName="isPinned" class="space-y-2">
+						<label for="pinned-order" class="block text-sm font-semibold text-gray-700"> Épinglé </label>
+						<div class="relative">
+							<select
+								id="pinned-order"
+								formControlName="orderOperator"
+								class="block w-full px-4 py-2.5 pr-10 text-sm text-gray-700 bg-gray-50 border border-gray-300 rounded-lg appearance-none cursor-pointer transition-all duration-200 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent focus:bg-white">
+								<option [ngValue]="null">Pas de tri</option>
+								<option value="ASC">↑ Ascendant</option>
+								<option value="DESC">↓ Descendant</option>
+							</select>
+							<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+								<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+								</svg>
+							</div>
+						</div>
+					</div>
+
+					<!-- Rating Order -->
+					<div formGroupName="rating" class="space-y-2">
+						<label for="rating-order" class="block text-sm font-semibold text-gray-700"> Évaluation </label>
+						<div class="relative">
+							<select
+								id="rating-order"
+								formControlName="orderOperator"
+								class="block w-full px-4 py-2.5 pr-10 text-sm text-gray-700 bg-gray-50 border border-gray-300 rounded-lg appearance-none cursor-pointer transition-all duration-200 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent focus:bg-white">
+								<option [ngValue]="null">Pas de tri</option>
+								<option value="ASC">↑ Ascendant</option>
+								<option value="DESC">↓ Descendant</option>
+							</select>
+							<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+								<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+								</svg>
+							</div>
+						</div>
+					</div>
+
+					<!-- Created At Order -->
+					<div formGroupName="createdAt" class="space-y-2">
+						<label for="created-at-order" class="block text-sm font-semibold text-gray-700">
+							Date de création
+						</label>
+						<div class="relative">
+							<select
+								id="created-at-order"
+								formControlName="orderOperator"
+								class="block w-full px-4 py-2.5 pr-10 text-sm text-gray-700 bg-gray-50 border border-gray-300 rounded-lg appearance-none cursor-pointer transition-all duration-200 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent focus:bg-white">
+								<option [ngValue]="null">Pas de tri</option>
+								<option value="ASC">↑ Les plus anciens en premier</option>
+								<option value="DESC">↓ Les plus récents en premier</option>
+							</select>
+							<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+								<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+								</svg>
+							</div>
+						</div>
+					</div>
+
+					<!-- Helpful Count Order -->
+					<div formGroupName="helpfulCount" class="space-y-2">
+						<label for="helpful-count-order" class="block text-sm font-semibold text-gray-700">
+							Nombre utile
+						</label>
+						<div class="relative">
+							<select
+								id="helpful-count-order"
+								formControlName="orderOperator"
+								class="block w-full px-4 py-2.5 pr-10 text-sm text-gray-700 bg-gray-50 border border-gray-300 rounded-lg appearance-none cursor-pointer transition-all duration-200 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent focus:bg-white">
+								<option [ngValue]="null">Pas de tri</option>
+								<option value="ASC">↑ Ascendant</option>
+								<option value="DESC">↓ Descendant</option>
+							</select>
+							<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+								<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+								</svg>
+							</div>
+						</div>
+					</div>
+
+					<!-- Not Helpful Count Order -->
+					<div formGroupName="notHelpfulCount" class="space-y-2">
+						<label for="not-helpful-count-order" class="block text-sm font-semibold text-gray-700">
+							Non utile Compter
+						</label>
+						<div class="relative">
+							<select
+								id="not-helpful-count-order"
+								formControlName="orderOperator"
+								class="block w-full px-4 py-2.5 pr-10 text-sm text-gray-700 bg-gray-50 border border-gray-300 rounded-lg appearance-none cursor-pointer transition-all duration-200 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent focus:bg-white">
+								<option [ngValue]="null">Pas de tri</option>
+								<option value="ASC">↑ Ascendant</option>
+								<option value="DESC">↓ Descendant</option>
+							</select>
+							<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+								<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+								</svg>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Action Buttons -->
+			<div class="flex items-center justify-between gap-4 px-2">
+				<button
+					(click)="resetFilter()"
+					type="button"
+					class="px-6 py-2.5 rounded-lg bg-white border-2 border-gray-300 text-gray-700 text-sm font-semibold hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 flex items-center gap-2 shadow-sm">
+					<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+					</svg>
+					Réinitialiser
+				</button>
+
+				<button
+					type="button"
+					[disabled]="isLoading()"
+					(click)="callApi()"
+					class="px-8 py-2.5 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-sm font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:transform-none flex items-center gap-2">
+					<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+					</svg>
+					Appliquer
+				</button>
+			</div>
+		</form>
+	</div>
+
+	<div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+		<div class="lg:col-span-3">
+			@if (isLoading()) {
+				<div class="flex items-center justify-center">
+					<svg class="size-8 animate-spin text-blue-500" fill="none" viewBox="0 0 24 24">
+						<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+						<path
+							class="opacity-75"
+							fill="currentColor"
+							d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+					</svg>
+					<span class="ml-2 text-blue-500"></span>
+				</div>
+			}
+
+			@if (!isLoading() && reviewsList().length > 0) {
+				<div class="space-y-4">
+					@for (review of reviewsList(); track review.cursor) {
+						<revlib-review-display
+							[businessId]="businessId()"
+							[businessName]="businessName()"
+							[review]="review.node"
+							[isBusinessOwner]="isBusinessOwner()"></revlib-review-display>
+					}
+				</div>
+			}
+
+			@if (!isLoading() && reviewsList().length === 0) {
+				<div class="text-center py-12">
+					<p class="text-gray-500">No reviews found</p>
+				</div>
+			}
+
+			<div class="flex items-center justify-between mt-8">
+				<button
+					(click)="previousPage()"
+					[disabled]="!hasPreviousPage || isLoading()"
+					class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition">
+					Previous
+				</button>
+
+				<div class="text-sm text-gray-600">
+					@if (reviewsList().length > 0) {
+						{{ currentPage() }} / {{ totalPages() }}
+					} @else {
+						No pages
+					}
+				</div>
+
+				<button
+					(click)="nextPage()"
+					[disabled]="!hasNextPage || isLoading()"
+					class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition">
+					Next
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

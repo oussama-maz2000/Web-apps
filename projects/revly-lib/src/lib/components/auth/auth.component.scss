@@ -1,0 +1,183 @@
+@use 'sass:color';
+
+// Layout
+.container {
+	display: flex;
+	height: 100%;
+}
+
+// Left side panel base styles
+.left {
+	flex: 1;
+	background-size: cover;
+	background-position: center;
+	position: relative;
+	background-color: #d7d40d;
+
+	.overlay {
+		position: absolute;
+		bottom: 10%;
+		left: 5%;
+		color: white;
+		text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+		max-width: 80%;
+
+		h1 {
+			font-size: 2.5rem;
+			margin-bottom: 1rem;
+		}
+
+		p {
+			font-size: 1.2rem;
+		}
+	}
+}
+
+// Right side panel with form
+.right {
+	flex: 1;
+	align-items: center;
+	background: #fff;
+	height: 100%;
+}
+
+// Auth box container
+.auth-box {
+	width: 85%;
+	text-align: center;
+	padding: 2rem 1.5rem;
+	border-radius: 8px;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+	transition: all 0.3s ease;
+
+	h2 {
+		margin-bottom: 0.5rem;
+		font-weight: 500;
+	}
+}
+
+// Form fields
+.full-width {
+	width: 100%;
+	margin-bottom: 0.5rem;
+}
+
+.form-content {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	margin-bottom: 1rem;
+}
+
+.form-row {
+	display: flex;
+	gap: 1rem;
+	margin-bottom: 0.5rem;
+
+	> mat-form-field {
+		flex: 1;
+		min-width: 0;
+	}
+}
+
+// Common button styling
+.auth-button {
+	width: 100%;
+	margin-top: 1.25rem;
+	padding: 0.75rem;
+	font-weight: 500;
+	transition: background-color 0.2s ease;
+	transition: color 0.2s ease;
+
+	&:hover:not([disabled]) {
+		background-color: color.adjust(#ffcc00, $lightness: -5%);
+	}
+
+	&:hover:disabled {
+		cursor: progress;
+	}
+
+	mat-icon {
+		animation: spin 1.5s linear infinite;
+		margin-right: 0.5rem;
+	}
+}
+
+// Divider line
+.divider {
+	margin: 1.5rem 0 1rem;
+	color: #757575;
+	position: relative;
+	text-align: center;
+
+	&::before,
+	&::after {
+		content: '';
+		position: absolute;
+		top: 50%;
+		width: 40%;
+		height: 1px;
+		background-color: #ddd;
+	}
+
+	&::before {
+		left: -3%;
+	}
+
+	&::after {
+		right: -3%;
+	}
+}
+
+// Form container
+.form-container {
+	position: relative;
+}
+
+// Animation for loading spinner
+@keyframes spin {
+	from {
+		transform: rotate(0deg);
+	}
+
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+	.container {
+		flex-direction: column;
+	}
+
+	.left {
+		flex: 0 0 30%;
+	}
+
+	.right {
+		flex: 0 0 70%;
+	}
+
+	.form-row {
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.auth-box {
+		width: 90%;
+		padding: 1.5rem 1rem;
+		margin: 1rem;
+	}
+}
+
+.google-button-container {
+	margin-top: 1rem;
+	width: 100%;
+}
+
+.logo {
+	height: 80px;
+	width: auto;
+	margin: auto;
+}

@@ -1,0 +1,36 @@
+<mat-expansion-panel class="mb-3 shadow-none border border-gray-200 rounded-lg">
+	<mat-expansion-panel-header>
+		<mat-panel-title class="text-sm">
+			<mat-icon class="text-blue-500 mr-2 flex items-center" style="font-size: 20px">edit</mat-icon>
+			Modifier l'email
+		</mat-panel-title>
+	</mat-expansion-panel-header>
+	<div class="p-4 bg-gray-50">
+		<form [formGroup]="emailChangeForm" class="space-y-4">
+			<mat-form-field class="w-full">
+				<mat-label>Nouvel email</mat-label>
+				<mat-icon matPrefix fontIcon="email"></mat-icon>
+				<input matInput type="email" formControlName="newEmail" />
+				@if (emailControl?.hasError('required')) {
+					<mat-error>Le champ Nouvel email est requis.</mat-error>
+				}
+				@if (emailControl?.hasError('email') || emailControl?.hasError('pattern')) {
+					<mat-error>Le format de l'email est invalide.</mat-error>
+				}
+				@if (emailControl?.hasError('sameAsCurrent')) {
+					<mat-error>Le nouvel email doit être différent de l'email actuel.</mat-error>
+				}
+			</mat-form-field>
+
+			<app-revlib-password-field [fullWidth]="true" controlName="currentPassword" label="Mot de passe" />
+
+			<div class="flex gap-2 justify-end">
+				<button matButton color="accent">Annuler</button>
+				<button mat-raised-button color="primary" (click)="onSubmit()">Modifier l'email</button>
+			</div>
+		</form>
+		<app-revlib-backend-result
+			[errorResult]="errorResult()"
+			[successMessage]="successMessage()"></app-revlib-backend-result>
+	</div>
+</mat-expansion-panel>

@@ -1,0 +1,6 @@
+<h2 mat-dialog-title>Confirmation de récupération de compte</h2>
+<mat-dialog-content> {{ data.message }} {{ data.recovery.expiresAt | localDateTime }} </mat-dialog-content>
+<mat-dialog-actions>
+	<button matButton mat-dialog-close>Non</button>
+	<button matButton mat-dialog-close="true" cdkFocusInitial>Oui</button>
+</mat-dialog-actions>

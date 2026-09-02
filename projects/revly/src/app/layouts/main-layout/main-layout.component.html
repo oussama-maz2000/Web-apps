@@ -1,0 +1,72 @@
+<div class="main-wrapper">
+	<app-header>
+		<!-- <app-navbar [title]="navbarTitle"/>  dont mind this -->
+	</app-header>
+
+	<mat-sidenav-container class="sidenav-container">
+		<mat-sidenav #sidenav mode="over" class="sidenav" [opened]="isSideNavOpen()">
+			<mat-nav-list>
+				<h3 mat-subheader>General</h3>
+				<a mat-list-item routerLink="/home">
+					<mat-icon matListItemIcon fontIcon="home"></mat-icon>
+					Accueil
+				</a>
+
+				<a mat-list-item routerLink="/profile">
+					<mat-icon matListItemIcon fontIcon="account_circle"></mat-icon>
+					Profil
+				</a>
+
+				<a mat-list-item routerLink="/profile">
+					<mat-icon matListItemIcon fontIcon="store"></mat-icon>
+					Établissements détenus
+				</a>
+
+				<mat-divider></mat-divider>
+
+				<h3 mat-subheader>Categories</h3>
+				<a mat-list-item routerLink="Biz/categories/restaurants">
+					<mat-icon matListItemIcon fontIcon="restaurant"></mat-icon>
+					Restaurants
+				</a>
+				<a mat-list-item routerLink="Biz/categories/barbers">
+					<mat-icon matListItemIcon fontIcon="selfcare"></mat-icon>
+					Barbiers
+				</a>
+				<a mat-list-item routerLink="Biz/categories/cafes">
+					<mat-icon matListItemIcon fontIcon="local_cafe"></mat-icon>
+					Cafés
+				</a>
+
+				<mat-divider></mat-divider>
+
+				<h3 mat-subheader>Paramètres</h3>
+				<a mat-list-item routerLink="/settings">
+					<mat-icon matListItemIcon fontIcon="settings"></mat-icon>
+					Paramètres
+				</a>
+
+				<a mat-list-item routerLink="/about">
+					<mat-icon matListItemIcon fontIcon="info"></mat-icon>
+					À propos
+				</a>
+
+				<a mat-list-item routerLink="/help">
+					<mat-icon matListItemIcon fontIcon="help"></mat-icon>
+					Aide
+				</a>
+
+				<a mat-list-item routerLink="/contact">
+					<mat-icon matListItemIcon fontIcon="contact_mail"></mat-icon>
+					Nous contacter
+				</a>
+			</mat-nav-list>
+		</mat-sidenav>
+
+		<mat-sidenav-content class="router-outlet-container">
+			<router-outlet />
+		</mat-sidenav-content>
+	</mat-sidenav-container>
+
+	<app-footer />
+</div>

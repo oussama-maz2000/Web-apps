@@ -1,0 +1,138 @@
+<div class="relative">
+	<!-- Header -->
+	<div class="px-6 pt-6 pb-4 border-b border-gray-200">
+		<div class="flex items-start justify-between">
+			<div class="flex-1">
+				<h2 class="text-2xl font-semibold text-gray-900 mb-1">Claims Review Approuve</h2>
+			</div>
+			<button
+				(click)="onClose()"
+				class="text-gray-400 hover:text-gray-600 transition-colors p-1 rounded-lg hover:bg-gray-100">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+					<path
+						d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+				</svg>
+			</button>
+		</div>
+	</div>
+	<mat-dialog-content class="px-6 py-6">
+		<div class="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg flex items-start gap-3">
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 20 20"
+				fill="currentColor"
+				class="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5">
+				<path
+					fill-rule="evenodd"
+					d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z"
+					clip-rule="evenodd" />
+			</svg>
+			<div>
+				<p class="text-sm font-medium text-amber-900">After filling the form will be sent to server</p>
+				<p class="text-xs text-amber-700 mt-1">This action will immediately update claims reveiw.</p>
+			</div>
+		</div>
+
+		<div class="space-y-4" [formGroup]="dialogForm">
+			<div>
+				<label class="block text-sm font-medium text-gray-700 mb-2"> Entre the email </label>
+				<mat-form-field class="full-width">
+					<mat-label>Claims Id</mat-label>
+					<input matInput formControlName="claimId" />
+				</mat-form-field>
+			</div>
+
+			<div>
+				<label class="block text-sm font-medium text-gray-700 mb-2"> Entre the email </label>
+				<mat-form-field class="full-width">
+					<mat-label>Action</mat-label>
+					<mat-select formControlName="action" required>
+						@for (action of actions; track action.value) {
+							<mat-option [value]="action.value">
+								<div class="flex items-center gap-2">
+									<span>{{ action.label }}</span>
+								</div>
+							</mat-option>
+						}
+					</mat-select>
+					@if (
+						dialogForm.controls.action.invalid &&
+						(dialogForm.controls.action.touched || dialogForm.controls.action.dirty)
+					) {
+						<mat-error>
+							@if (dialogForm.controls.action.hasError('required')) {
+								<span>Action is required</span>
+							}
+						</mat-error>
+					}
+				</mat-form-field>
+			</div>
+
+			@if (shouldShowRejectionReason) {
+				<div>
+					<label class="block text-sm font-medium text-gray-700 mb-2"> Rejection Reason </label>
+					<mat-form-field class="w-full">
+						<mat-label>Select Reason</mat-label>
+
+						<mat-select formControlName="rejectionReason" required>
+							@for (reason of rejectionReasons; track reason.value) {
+								<mat-option [value]="reason.value">
+									<div class="flex items-center gap-2">
+										<span>{{ reason.label }}</span>
+									</div>
+								</mat-option>
+							}
+						</mat-select>
+						@if (
+							dialogForm.controls.rejectionReason.invalid &&
+							(dialogForm.controls.rejectionReason.touched || dialogForm.controls.rejectionReason.dirty)
+						) {
+							<mat-error>Reason is required</mat-error>
+						}
+					</mat-form-field>
+				</div>
+			}
+
+			@if (shouldShowRejectionNote) {
+				<div>
+					<label class="block text-sm font-medium text-gray-700 mb-2">Rejection Note </label>
+					<mat-form-field class="full-width">
+						<mat-label>Rejection Note</mat-label>
+						<input matInput formControlName="rejectionNote" />
+						@if (
+							dialogForm.controls.rejectionNote.invalid &&
+							(dialogForm.controls.rejectionNote.touched || dialogForm.controls.rejectionNote.dirty)
+						) {
+							<mat-error>Rejection Note is required</mat-error>
+						}
+					</mat-form-field>
+				</div>
+			}
+		</div>
+	</mat-dialog-content>
+
+	<mat-dialog-actions class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end gap-3">
+		<button
+			matButton
+			(click)="onClose()"
+			class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+			Cancel
+		</button>
+		<button
+			(click)="onSubmitClick()"
+			[disabled]="dialogForm.invalid"
+			mat-raised-button
+			cdkFocusInitial
+			class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed">
+			<span class="flex items-center gap-2">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+					<path
+						fill-rule="evenodd"
+						d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+						clip-rule="evenodd" />
+				</svg>
+				Send
+			</span>
+		</button>
+	</mat-dialog-actions>
+</div>

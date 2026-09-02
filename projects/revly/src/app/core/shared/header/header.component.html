@@ -1,0 +1,41 @@
+<div class="header-container">
+	<button matIconButton (click)="toggleSidenav()">
+		<mat-icon>menu</mat-icon>
+	</button>
+	<a routerLink="/">
+		<img src="/assets/revlib/logo.svg" alt="Revly Logo" class="logo" />
+	</a>
+
+	<div class="flex-spacer"></div>
+
+	@if (isLoggedIn()) {
+		<button mat-icon-button [matMenuTriggerFor]="userMenu" class="relative" matTooltip="Profile">
+			@if (storeProfilePhoto()) {
+				<div class="relative w-10 h-10 rounded-full overflow-hidden flex items-center justify-center bg-gray-100">
+					<img
+						[src]="buildImageUrl(storeProfilePhoto()!, 'large')"
+						[alt]="user().name"
+						class="w-full h-full object-cover" />
+				</div>
+			} @else {
+				<revlib-avatar [name]="user().name" [size]="60"></revlib-avatar>
+			}
+		</button>
+
+		<mat-menu #userMenu="matMenu">
+			<button mat-menu-item routerLink="/profile">
+				<mat-icon fontIcon="person"></mat-icon>
+				<span>Profil</span>
+			</button>
+
+			<button mat-menu-item (click)="logout$()">
+				<mat-icon fontIcon="exit_to_app"></mat-icon>
+				<span>Se déconnecter</span>
+			</button>
+		</mat-menu>
+	} @else {
+		<button matFab [routerLink]="loginPath" matTooltip="Se connecter">
+			<mat-icon fontIcon="login"></mat-icon>
+		</button>
+	}
+</div>

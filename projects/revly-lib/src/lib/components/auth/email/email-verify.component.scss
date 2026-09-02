@@ -1,0 +1,100 @@
+.verify-card {
+	max-width: 400px;
+	margin: 50px auto;
+	padding: 24px;
+	border: 1px solid #e0e0e0;
+	border-radius: 8px;
+	text-align: center;
+	font-family: Arial, sans-serif;
+	background-color: #fff;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+	transition: all 0.3s ease;
+
+	@media (max-width: 480px) {
+		max-width: 90%;
+		margin: 30px auto;
+		padding: 16px;
+	}
+
+	.title {
+		margin-top: 0;
+		font-size: 1.5rem;
+		margin-bottom: 16px;
+		color: #333;
+		font-weight: 500;
+	}
+
+	.email {
+		margin: 12px 0;
+		font-size: 1rem;
+		color: #555;
+		word-break: break-word;
+		padding: 8px 12px;
+		background-color: #f5f5f5;
+		border-radius: 4px;
+		font-weight: 500;
+	}
+
+	.description {
+		color: #666;
+		margin-bottom: 16px;
+		font-size: 0.95rem;
+		line-height: 1.5;
+	}
+
+	button {
+		cursor: pointer;
+		font-size: 0.95rem;
+		padding: 10px 18px;
+		margin-top: 12px;
+		transition: all 0.2s ease;
+		width: 100%;
+		border-radius: 4px;
+		font-weight: 500;
+
+		&:hover:not([disabled]) {
+			transform: translateY(-2px);
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+		}
+	}
+
+	.btn-resend {
+		background-color: #1976d2;
+		color: #fff;
+		border: none;
+
+		&:hover:not([disabled]) {
+			background-color: #1565c0;
+		}
+	}
+
+	.btn-resend[disabled] {
+		background-color: #90caf9;
+		cursor: not-allowed;
+		opacity: 0.7;
+	}
+
+	.countdown {
+		font-weight: bold;
+		color: #1976d2;
+	}
+
+	.btn-secondary {
+		margin-top: 16px;
+		border: 2px solid #1976d2;
+		background-color: transparent;
+		color: #1976d2;
+
+		&:hover {
+			background-color: #f0f7ff;
+		}
+	}
+
+	/* Spinner styling for "confirm" */
+	&.loading-state {
+		p {
+			font-size: 1rem;
+			color: #555;
+		}
+	}
+}

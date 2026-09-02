@@ -1,0 +1,65 @@
+<div class="flex flex-col gap-4 p-4 max-w-3xl mx-auto">
+	<form [formGroup]="form">
+		<!-- Google Maps -->
+		<mat-form-field class="w-full">
+			<mat-label>Lien Google Maps *</mat-label>
+			<input matInput formControlName="googleMapsLink" />
+		</mat-form-field>
+
+		<!-- Facebook -->
+		<mat-form-field class="w-full">
+			<mat-label>Page Facebook (Optionnel)</mat-label>
+			<input matInput formControlName="facebookLink" />
+		</mat-form-field>
+
+		<!-- Business Name -->
+		<mat-form-field class="w-full">
+			<mat-label>Nom du commerce *</mat-label>
+			<input matInput formControlName="businessName" />
+		</mat-form-field>
+
+		<!-- Business Phone -->
+		<mat-form-field class="w-full">
+			<mat-label>Téléphone du commerce *</mat-label>
+			<input matInput formControlName="businessPhone" />
+		</mat-form-field>
+
+		<!-- Category -->
+		<mat-form-field class="w-full">
+			<mat-label>Commerce</mat-label>
+			<mat-select formControlName="categoryId">
+				@for (cat of categories(); track cat.value) {
+					<mat-option [value]="cat.value">{{ cat.nameEn }}</mat-option>
+				}
+			</mat-select>
+		</mat-form-field>
+
+		<!-- SubCategory -->
+		@if (selectedCategory()) {
+			<mat-form-field class="w-full">
+				<mat-label>Sous-catégorie</mat-label>
+				<mat-select formControlName="subCategoryId">
+					@for (sub of selectedCategory()!.subCategories; track sub.value) {
+						<mat-option [value]="sub.value">{{ sub.nameEn }}</mat-option>
+					}
+				</mat-select>
+			</mat-form-field>
+		}
+
+		<!-- Description -->
+		<mat-form-field class="w-full">
+			<mat-label>Description</mat-label>
+			<textarea matInput rows="4" formControlName="description"></textarea>
+		</mat-form-field>
+
+		<button matButton="filled" color="primary" [disabled]="isLoading()" (click)="submit(true)">
+			@if (!isLoading()) {
+				Soumettre une nouvelle entreprise
+			} @else {
+				Envoi...
+			}
+		</button>
+	</form>
+
+	<app-revlib-backend-result [errorResult]="errorResult()" [successMessage]="successMessage()" />
+</div>

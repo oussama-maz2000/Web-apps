@@ -1,0 +1,656 @@
+// Import Material 3 theming system
+@use '@angular/material' as mat;
+
+// Define color palettes using Material 3 approach
+$primary-palette: mat.$yellow-palette;
+$accent-palette: mat.$orange-palette;
+$warn-palette: mat.$red-palette;
+
+// Create Material 3 theme configurations with proper warn mapping
+$light-theme: mat.define-theme(
+	(
+		color: (
+			theme-type: light,
+			primary: $primary-palette,
+			tertiary: $accent-palette
+		),
+		typography: (
+			brand-family: 'Inter, system-ui, -apple-system, sans-serif',
+			plain-family: 'Inter, system-ui, -apple-system, sans-serif',
+			bold-weight: 600,
+			medium-weight: 500,
+			regular-weight: 400
+		),
+		density: (
+			scale: 0
+		)
+	)
+);
+
+$dark-theme: mat.define-theme(
+	(
+		color: (
+			theme-type: dark,
+			primary: $primary-palette,
+			tertiary: $accent-palette
+		),
+		typography: (
+			brand-family: 'Inter, system-ui, -apple-system, sans-serif',
+			plain-family: 'Inter, system-ui, -apple-system, sans-serif',
+			bold-weight: 600,
+			medium-weight: 500,
+			regular-weight: 400
+		),
+		density: (
+			scale: 0
+		)
+	)
+);
+
+// Include core styles once
+@include mat.core();
+
+// Apply the default light theme
+html,
+body {
+	@include mat.all-component-themes($light-theme);
+}
+
+// Dark theme with media query - ONLY applies when no explicit theme class is present
+@media (prefers-color-scheme: dark) {
+	html:not(.light-theme):not(.dark-theme) {
+		@include mat.all-component-colors($dark-theme);
+
+		// Apply dark theme styles only when no explicit theme classes are present
+		color: var(--mat-sys-on-surface);
+		background-color: var(--mat-sys-surface);
+	}
+}
+
+// EXPLICIT THEME CLASSES - these should have higher precedence than media queries
+// Light theme explicit class (will override browser preference)
+html.light-theme {
+	@include mat.all-component-colors($light-theme);
+
+	--mat-sys-primary: #f3c623;
+	--mat-sys-primary-rgb: 243, 198, 35;
+	--mat-sys-on-primary: #1f1a00;
+	--mat-sys-primary-container: #fef3e2;
+	--mat-sys-on-primary-container: #342f00;
+	--mat-sys-secondary: #fa812f;
+	--mat-sys-secondary-rgb: 250, 129, 47;
+	--mat-sys-on-secondary: #ffffff;
+	--mat-sys-secondary-container: #ffedd5;
+	--mat-sys-on-secondary-container: #2c1400;
+	--mat-sys-tertiary: #ffb22c;
+	--mat-sys-tertiary-rgb: 255, 178, 44;
+	--mat-sys-on-tertiary: #2c1400;
+	--mat-sys-tertiary-container: #fff7ed;
+	--mat-sys-on-tertiary-container: #472700;
+
+	--mat-sys-error: #dc2626;
+	--mat-sys-error-rgb: 220, 38, 38;
+	--mat-sys-on-error: #ffffff;
+	--mat-sys-error-container: #fecaca;
+	--mat-sys-on-error-container: #7f1d1d;
+
+	--mat-sys-surface: #fefaf5;
+	--mat-sys-on-surface: #1c1917;
+	--mat-sys-surface-variant: #f5f5f4;
+	--mat-sys-on-surface-variant: #57534e;
+	--mat-sys-outline: #a8a29e;
+	--mat-sys-outline-variant: #d6d3d1;
+
+	color: var(--mat-sys-on-surface);
+	background-color: var(--mat-sys-surface);
+
+	p,
+	span,
+	label,
+	div,
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		color: var(--mat-sys-on-surface);
+	}
+}
+
+// Dark theme explicit class (will override browser preference)
+html.dark-theme {
+	@include mat.all-component-colors($dark-theme);
+
+	--mat-sys-primary: #f5e400;
+	--mat-sys-primary-rgb: 245, 228, 0;
+	--mat-sys-on-primary: #1f1a00;
+	--mat-sys-primary-container: #4d4600;
+	--mat-sys-on-primary-container: #fff1c4;
+
+	--mat-sys-secondary: #ffc947;
+	--mat-sys-secondary-rgb: 255, 201, 71;
+	--mat-sys-on-secondary: #2c1400;
+	--mat-sys-secondary-container: #472700;
+	--mat-sys-on-secondary-container: #ffe08c;
+
+	--mat-sys-error: #ff4c4c;
+	--mat-sys-error-rgb: 255, 76, 76;
+	--mat-sys-on-error: #ffffff;
+	--mat-sys-error-container: #8c0000;
+	--mat-sys-on-error-container: #ffdad4;
+
+	--mat-sys-surface: #1c1917;
+	--mat-sys-on-surface: #f5f5f4;
+	--mat-sys-surface-variant: #44403c;
+	--mat-sys-on-surface-variant: #d6d3d1;
+	--mat-sys-outline: #a8a29e;
+	--mat-sys-outline-variant: #57534e;
+
+	color: var(--mat-sys-on-surface);
+	background-color: var(--mat-sys-surface);
+
+	p,
+	label,
+	span,
+	div,
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		color: var(--mat-sys-on-surface);
+	}
+}
+
+// Custom typography using CSS custom properties
+:root {
+	// Typography system tokens - Material 3 approach
+	--mat-sys-typescale-display-large-font: 'Inter, system-ui, -apple-system, sans-serif';
+	--mat-sys-typescale-display-large-weight: 400;
+	--mat-sys-typescale-display-medium-font: 'Inter, system-ui, -apple-system, sans-serif';
+	--mat-sys-typescale-display-medium-weight: 400;
+	--mat-sys-typescale-display-small-font: 'Inter, system-ui, -apple-system, sans-serif';
+	--mat-sys-typescale-display-small-weight: 400;
+
+	--mat-sys-typescale-headline-large-font: 'Inter, system-ui, -apple-system, sans-serif';
+	--mat-sys-typescale-headline-large-weight: 600;
+	--mat-sys-typescale-headline-medium-font: 'Inter, system-ui, -apple-system, sans-serif';
+	--mat-sys-typescale-headline-medium-weight: 600;
+	--mat-sys-typescale-headline-small-font: 'Inter, system-ui, -apple-system, sans-serif';
+	--mat-sys-typescale-headline-small-weight: 600;
+
+	--mat-sys-typescale-title-large-font: 'Inter, system-ui, -apple-system, sans-serif';
+	--mat-sys-typescale-title-large-weight: 500;
+	--mat-sys-typescale-title-medium-font: 'Inter, system-ui, -apple-system, sans-serif';
+	--mat-sys-typescale-title-medium-weight: 500;
+	--mat-sys-typescale-title-small-font: 'Inter, system-ui, -apple-system, sans-serif';
+	--mat-sys-typescale-title-small-weight: 500;
+
+	--mat-sys-typescale-body-large-font: 'Inter, system-ui, -apple-system, sans-serif';
+	--mat-sys-typescale-body-large-weight: 400;
+	--mat-sys-typescale-body-medium-font: 'Inter, system-ui, -apple-system, sans-serif';
+	--mat-sys-typescale-body-medium-weight: 400;
+	--mat-sys-typescale-body-small-font: 'Inter, system-ui, -apple-system, sans-serif';
+	--mat-sys-typescale-body-small-weight: 400;
+
+	--mat-sys-typescale-label-large-font: 'Inter, system-ui, -apple-system, sans-serif';
+	--mat-sys-typescale-label-large-weight: 500;
+	--mat-sys-typescale-label-medium-font: 'Inter, system-ui, -apple-system, sans-serif';
+	--mat-sys-typescale-label-medium-weight: 500;
+	--mat-sys-typescale-label-small-font: 'Inter, system-ui, -apple-system, sans-serif';
+	--mat-sys-typescale-label-small-weight: 500;
+
+	// Material 3 system token overrides
+	--mat-sys-primary: #f3c623;
+	--mat-sys-primary-rgb: 243, 198, 35;
+	--mat-sys-on-primary: #1f1a00;
+	--mat-sys-primary-container: #fef3e2;
+	--mat-sys-on-primary-container: #342f00;
+
+	--mat-sys-secondary: #fa812f;
+	--mat-sys-secondary-rgb: 250, 129, 47;
+	--mat-sys-on-secondary: #ffffff;
+	--mat-sys-secondary-container: #ffedd5;
+	--mat-sys-on-secondary-container: #2c1400;
+
+	--mat-sys-tertiary: #ffb22c;
+	--mat-sys-tertiary-rgb: 255, 178, 44;
+	--mat-sys-on-tertiary: #2c1400;
+	--mat-sys-tertiary-container: #fff7ed;
+	--mat-sys-on-tertiary-container: #472700;
+
+	--mat-sys-error: #dc2626;
+	--mat-sys-error-rgb: 220, 38, 38;
+	--mat-sys-on-error: #ffffff;
+	--mat-sys-error-container: #fecaca;
+	--mat-sys-on-error-container: #7f1d1d;
+
+	--mat-sys-surface: #fefaf5;
+	--mat-sys-on-surface: #1c1917;
+	--mat-sys-surface-variant: #f5f5f4;
+	--mat-sys-on-surface-variant: #57534e;
+	--mat-sys-outline: #a8a29e;
+	--mat-sys-outline-variant: #d6d3d1;
+
+	// Custom gold palette
+	--gold-50: #fefaf5;
+	--gold-100: #fef3e2;
+	--gold-200: #fde4c4;
+	--gold-300: #fbd3a0;
+	--gold-400: #f9c076;
+	--gold-500: #f3c623;
+	--gold-600: #e6b71f;
+	--gold-700: #d4a71c;
+	--gold-800: #c19818;
+	--gold-900: #a17f13;
+
+	--orange-50: #fff7ed;
+	--orange-100: #ffedd5;
+	--orange-200: #fed7aa;
+	--orange-300: #fdba74;
+	--orange-400: #fb923c;
+	--orange-500: #fa812f;
+	--orange-600: #ea580c;
+	--orange-700: #c2410c;
+	--orange-800: #9a3412;
+	--orange-900: #7c2d12;
+
+	--neutral-50: #fafaf9;
+	--neutral-100: #f5f5f4;
+	--neutral-200: #e7e5e4;
+	--neutral-300: #d6d3d1;
+	--neutral-400: #a8a29e;
+	--neutral-500: #78716c;
+	--neutral-600: #57534e;
+	--neutral-700: #44403c;
+	--neutral-800: #292524;
+	--neutral-900: #1c1917;
+
+	// Semantic rating colors
+	--rating-excellent: var(--gold-500);
+	--rating-good: var(--gold-400);
+	--rating-average: var(--orange-400);
+	--rating-poor: #ef4444;
+	--rating-terrible: #dc2626;
+}
+
+// Dark theme rating adjustments
+html.dark-theme {
+	--rating-excellent: var(--gold-400);
+	--rating-good: var(--gold-300);
+	--rating-average: var(--orange-300);
+}
+
+// Semantic text variants
+.text-primary {
+	color: var(--mat-sys-primary);
+}
+
+.text-secondary {
+	color: var(--mat-sys-on-surface-variant);
+}
+
+.text-muted {
+	color: var(--mat-sys-outline);
+}
+
+//-------------------------------------------------------
+// COMPONENT-SPECIFIC MATERIAL 3 OVERRIDES
+//-------------------------------------------------------
+
+//-------------------------------------------------------
+// 1. BUTTON OVERRIDES
+//-------------------------------------------------------
+
+// Basic filled button overrides
+.mat-mdc-unelevated-button {
+	&.mat-primary {
+		--mat-button-filled-container-color: var(--mat-sys-primary);
+		--mat-button-filled-label-text-color: var(--mat-sys-on-primary);
+	}
+
+	&.mat-accent {
+		--mat-button-filled-container-color: var(--mat-sys-tertiary);
+		--mat-button-filled-label-text-color: var(--mat-sys-on-tertiary);
+	}
+
+	&.mat-warn {
+		--mat-button-filled-container-color: var(--mat-sys-error);
+		--mat-button-filled-label-text-color: var(--mat-sys-on-error);
+	}
+}
+
+// Enhanced button overrides for all button variants
+.mat-mdc-raised-button,
+.mat-mdc-outlined-button,
+.mat-mdc-button {
+	&.mat-primary {
+		--mdc-protected-button-container-color: var(--mat-sys-primary);
+		--mdc-protected-button-label-text-color: var(--mat-sys-on-primary);
+		--mdc-outlined-button-outline-color: var(--mat-sys-primary);
+		--mdc-outlined-button-label-text-color: var(--mat-sys-primary);
+		--mdc-text-button-label-text-color: var(--mat-sys-primary);
+	}
+
+	&.mat-accent {
+		--mdc-protected-button-container-color: var(--mat-sys-tertiary);
+		--mdc-protected-button-label-text-color: var(--mat-sys-on-tertiary);
+		--mdc-outlined-button-outline-color: var(--mat-sys-tertiary);
+		--mdc-outlined-button-label-text-color: var(--mat-sys-tertiary);
+		--mdc-text-button-label-text-color: var(--mat-sys-tertiary);
+	}
+
+	&.mat-warn {
+		--mdc-protected-button-container-color: var(--mat-sys-error);
+		--mdc-protected-button-label-text-color: var(--mat-sys-on-error);
+		--mdc-outlined-button-outline-color: var(--mat-sys-error);
+		--mdc-outlined-button-label-text-color: var(--mat-sys-error);
+		--mdc-text-button-label-text-color: var(--mat-sys-error);
+	}
+}
+
+// FAB button overrides
+.mat-mdc-fab,
+.mat-mdc-mini-fab {
+	&.mat-primary {
+		--mat-fab-container-color: var(--mat-sys-primary);
+		--mat-fab-label-text-color: var(--mat-sys-on-primary);
+		--mat-fab-icon-color: var(--mat-sys-on-primary);
+		// For small FABs
+		--mat-fab-small-container-color: var(--mat-sys-primary);
+		// For extended FABs
+		--mdc-extended-fab-container-color: var(--mat-sys-primary);
+		--mdc-extended-fab-label-text-color: var(--mat-sys-on-primary);
+	}
+
+	&.mat-accent {
+		--mat-fab-container-color: var(--mat-sys-tertiary);
+		--mat-fab-label-text-color: var(--mat-sys-on-tertiary);
+		--mat-fab-icon-color: var(--mat-sys-on-tertiary);
+		// For small FABs
+		--mat-fab-small-container-color: var(--mat-sys-tertiary);
+		// For extended FABs
+		--mdc-extended-fab-container-color: var(--mat-sys-tertiary);
+		--mdc-extended-fab-label-text-color: var(--mat-sys-on-tertiary);
+	}
+
+	&.mat-warn {
+		--mat-fab-container-color: var(--mat-sys-error);
+		--mat-fab-label-text-color: var(--mat-sys-on-error);
+		--mat-fab-icon-color: var(--mat-sys-on-error);
+		// For small FABs
+		--mat-fab-small-container-color: var(--mat-sys-error);
+		// For extended FABs
+		--mdc-extended-fab-container-color: var(--mat-sys-error);
+		--mdc-extended-fab-label-text-color: var(--mat-sys-on-error);
+	}
+}
+
+// Gold button styling with proper token mapping
+.mat-mdc-raised-button.gold-button,
+.mat-mdc-unelevated-button.gold-button {
+	--mdc-protected-button-container-color: var(--gold-500);
+	--mdc-protected-button-label-text-color: var(--neutral-900);
+	--mat-button-filled-container-color: var(--gold-500);
+	--mat-button-filled-label-text-color: var(--neutral-900);
+
+	&:hover {
+		--mdc-protected-button-container-color: var(--gold-600);
+		--mat-button-filled-container-color: var(--gold-600);
+	}
+}
+
+//-------------------------------------------------------
+// 2. MENU ITEM OVERRIDES
+//-------------------------------------------------------
+
+// Menu item color overrides
+.mat-mdc-menu-item {
+	&.mat-primary {
+		--mat-menu-item-label-text-color: var(--mat-sys-primary);
+
+		.mat-icon {
+			color: var(--mat-sys-primary);
+		}
+
+		&:hover {
+			background-color: rgba(var(--mat-sys-primary-rgb, 243, 198, 35), 0.08);
+		}
+	}
+
+	&.mat-accent {
+		--mat-menu-item-label-text-color: var(--mat-sys-tertiary);
+
+		.mat-icon {
+			color: var(--mat-sys-tertiary);
+		}
+
+		&:hover {
+			background-color: rgba(var(--mat-sys-tertiary-rgb, 255, 178, 44), 0.08);
+		}
+	}
+
+	&.mat-warn {
+		--mat-menu-item-label-text-color: var(--mat-sys-error);
+
+		.mat-icon {
+			color: var(--mat-sys-error);
+		}
+
+		&:hover {
+			background-color: rgba(var(--mat-sys-error-rgb, 220, 38, 38), 0.08);
+		}
+	}
+}
+
+//-------------------------------------------------------
+// 3. ICON OVERRIDES
+//-------------------------------------------------------
+
+// Icon color overrides
+mat-icon {
+	&.mat-primary {
+		--mat-icon-color: var(--mat-sys-primary);
+		color: var(--mat-sys-primary);
+	}
+
+	&.mat-accent {
+		--mat-icon-color: var(--mat-sys-tertiary);
+		color: var(--mat-sys-tertiary);
+	}
+
+	&.mat-warn {
+		--mat-icon-color: var(--mat-sys-error);
+		color: var(--mat-sys-error);
+	}
+}
+
+//-------------------------------------------------------
+// 4. FORM CONTROLS OVERRIDES
+//-------------------------------------------------------
+
+// Checkbox overrides
+.mat-mdc-checkbox {
+	&.mat-primary {
+		--mdc-checkbox-selected-checkmark-color: var(--mat-sys-on-primary);
+		--mdc-checkbox-selected-icon-color: var(--mat-sys-primary);
+		--mdc-checkbox-selected-hover-icon-color: var(--mat-sys-primary);
+		--mdc-checkbox-selected-focus-icon-color: var(--mat-sys-primary);
+		--mdc-checkbox-selected-pressed-icon-color: var(--mat-sys-primary);
+	}
+
+	&.mat-accent {
+		--mdc-checkbox-selected-checkmark-color: var(--mat-sys-on-tertiary);
+		--mdc-checkbox-selected-icon-color: var(--mat-sys-tertiary);
+		--mdc-checkbox-selected-hover-icon-color: var(--mat-sys-tertiary);
+		--mdc-checkbox-selected-focus-icon-color: var(--mat-sys-tertiary);
+		--mdc-checkbox-selected-pressed-icon-color: var(--mat-sys-tertiary);
+	}
+
+	&.mat-warn {
+		--mdc-checkbox-selected-checkmark-color: var(--mat-sys-on-error);
+		--mdc-checkbox-selected-icon-color: var(--mat-sys-error);
+		--mdc-checkbox-selected-hover-icon-color: var(--mat-sys-error);
+		--mdc-checkbox-selected-focus-icon-color: var(--mat-sys-error);
+		--mdc-checkbox-selected-pressed-icon-color: var(--mat-sys-error);
+	}
+}
+
+// Form field theming
+.mat-mdc-form-field.review-form {
+	--mdc-outlined-text-field-outline-color: var(--gold-300);
+	--mdc-outlined-text-field-focus-outline-color: var(--gold-500);
+	--mdc-outlined-text-field-label-text-color: var(--neutral-600);
+	--mdc-outlined-text-field-focus-label-text-color: var(--gold-600);
+}
+
+//-------------------------------------------------------
+// 5. PROGRESS & INDICATORS
+//-------------------------------------------------------
+
+// Progress bar overrides
+.mat-mdc-progress-bar {
+	&.mat-primary {
+		--mdc-linear-progress-active-indicator-color: var(--mat-sys-primary);
+	}
+
+	&.mat-accent {
+		--mdc-linear-progress-active-indicator-color: var(--mat-sys-tertiary);
+	}
+
+	&.mat-warn {
+		--mdc-linear-progress-active-indicator-color: var(--mat-sys-error);
+	}
+
+	&.rating-progress {
+		--mdc-linear-progress-active-indicator-color: var(--gold-500);
+		--mdc-linear-progress-track-color: var(--gold-100);
+	}
+}
+
+//-------------------------------------------------------
+// 6. CHIP OVERRIDES
+//-------------------------------------------------------
+
+// Chip overrides
+.mat-mdc-chip {
+	&.mat-primary {
+		--mdc-chip-elevated-container-color: var(--mat-sys-primary-container);
+		--mdc-chip-label-text-color: var(--mat-sys-primary);
+	}
+
+	&.mat-accent {
+		--mdc-chip-elevated-container-color: var(--mat-sys-tertiary-container);
+		--mdc-chip-label-text-color: var(--mat-sys-tertiary);
+	}
+
+	&.mat-warn {
+		--mdc-chip-elevated-container-color: var(--mat-sys-error-container);
+		--mdc-chip-label-text-color: var(--mat-sys-error);
+	}
+
+	&.rating-chip {
+		--mdc-chip-elevated-container-color: var(--gold-100);
+		--mdc-chip-label-text-color: var(--gold-800);
+		--mdc-chip-outline-color: var(--gold-300);
+	}
+}
+
+//-------------------------------------------------------
+// 7. NOTIFICATION COMPONENTS
+//-------------------------------------------------------
+
+// Snackbar overrides
+.mat-mdc-snack-bar-container {
+	&.success-snackbar {
+		--mdc-snackbar-container-color: var(--gold-600);
+		--mdc-snackbar-supporting-text-color: var(--neutral-900);
+	}
+
+	&.error-snackbar {
+		--mdc-snackbar-container-color: var(--rating-poor);
+		--mdc-snackbar-supporting-text-color: white;
+	}
+}
+
+//-------------------------------------------------------
+// 8. CUSTOM COMPONENTS
+//-------------------------------------------------------
+
+// Rating component styles
+.rating-card {
+	background: var(--gold-50);
+	border: 1px solid var(--gold-200);
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	padding: 1.5rem;
+
+	&:hover {
+		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+		transform: translateY(-2px);
+	}
+
+	html.dark-theme &,
+	html[data-theme='dark'] & {
+		background: var(--neutral-800);
+		border-color: var(--neutral-700);
+	}
+}
+
+.rating-stars {
+	color: var(--neutral-300);
+	font-size: 1.25rem;
+	transition: color 0.2s ease;
+	cursor: pointer;
+
+	&.filled {
+		color: var(--rating-excellent);
+	}
+
+	&.half-filled {
+		background: linear-gradient(90deg, var(--rating-excellent) 50%, var(--neutral-300) 50%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
+	&:hover {
+		color: var(--rating-good);
+	}
+}
+
+.review-score {
+	font-weight: 600;
+	font-size: 1.125rem;
+	padding: 0.25rem 0.75rem;
+	border-radius: 6px;
+	display: inline-block;
+
+	&.excellent {
+		color: var(--rating-excellent);
+		background: color-mix(in srgb, var(--rating-excellent) 10%, transparent);
+	}
+
+	&.good {
+		color: var(--rating-good);
+		background: color-mix(in srgb, var(--rating-good) 10%, transparent);
+	}
+
+	&.average {
+		color: var(--rating-average);
+		background: color-mix(in srgb, var(--rating-average) 10%, transparent);
+	}
+
+	&.poor {
+		color: var(--rating-poor);
+		background: color-mix(in srgb, var(--rating-poor) 10%, transparent);
+	}
+
+	&.terrible {
+		color: var(--rating-terrible);
+		background: color-mix(in srgb, var(--rating-terrible) 10%, transparent);
+	}
+}

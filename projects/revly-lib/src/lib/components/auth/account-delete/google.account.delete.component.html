@@ -1,0 +1,39 @@
+<h2 mat-dialog-title class="flex items-center gap-2">
+	<mat-icon class="text-red-500">warning</mat-icon>
+	Supprimer le compte
+</h2>
+
+<mat-dialog-content class="!py-6">
+	<div class="space-y-4">
+		<p class="text-gray-700">
+			Votre compte a été créé avec Google. Pour confirmer la suppression, veuillez vous authentifier avec votre
+			compte Google.
+		</p>
+
+		<div class="p-4 bg-red-50 rounded-lg border border-red-200">
+			<p class="text-sm text-red-700 font-medium mb-2">⚠️ Attention :</p>
+			<ul class="text-sm text-gray-700 space-y-1 ml-4 list-disc">
+				<li>Pour des mesures de sécurité cette action nécessite une authentification Google</li>
+				<li>Votre compte sera désactivé pendant {{ gracePeriodDays }} jours</li>
+				<li>Vous pourrez le restaurer en vous connectant durant cette période</li>
+				<li>Au-delà de cette période toutes vos données seront <strong>définitivement supprimées</strong>.</li>
+			</ul>
+		</div>
+
+		<!-- Google Sign-In Button Container -->
+		<div class="flex justify-center pt-4">
+			<div id="google-signup-button" class="google-button-container"></div>
+		</div>
+
+		@if (errorMessage()) {
+			<div class="p-3 bg-red-100 border border-red-300 rounded-lg">
+				<p class="text-sm text-red-700">{{ errorMessage() }}</p>
+			</div>
+		}
+	</div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+	<div id="google-signup-button" class="google-button-container"></div>
+	<button matButton (click)="cancel()">Annuler</button>
+</mat-dialog-actions>

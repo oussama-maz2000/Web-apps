@@ -1,0 +1,97 @@
+<div class="test-container">
+	<button (click)="snack()">snack</button>
+	<p>num {{ this.num$ | async }}</p>
+	<h2>Material 3 Theme Testing</h2>
+
+	<div class="theme-card">
+		<h3>Theme Controls</h3>
+		<div class="theme-toggle">
+			<span>Light</span>
+			<mat-slide-toggle [checked]="currentTheme === 'dark'" (change)="toggleTheme()" color="primary">
+			</mat-slide-toggle>
+			<span>Dark</span>
+		</div>
+		<p>
+			Current theme: <strong>{{ currentTheme }}</strong>
+		</p>
+	</div>
+
+	<div class="color-showcase">
+		<h3>Button Colors</h3>
+		<div class="button-row">
+			<button matButton="filled" color="primary">Primary Button</button>
+			<button matButton="filled" color="accent">Accent Button</button>
+			<button matButton="filled" color="warn">Warn Button</button>
+			<button matButton="filled" class="gold-button">Custom Gold Button</button>
+		</div>
+
+		<h3>Material Components</h3>
+		<div class="component-row">
+			<mat-form-field appearance="outline">
+				<mat-label>Input Field</mat-label>
+				<input matInput placeholder="Type something..." />
+			</mat-form-field>
+
+			<mat-checkbox color="primary">Primary Checkbox</mat-checkbox>
+			<mat-checkbox color="accent">Accent Checkbox</mat-checkbox>
+			<mat-checkbox color="warn">Warn Checkbox</mat-checkbox>
+		</div>
+
+		<div class="component-row">
+			<mat-chip-set>
+				<mat-chip color="primary">Primary Chip</mat-chip>
+				<mat-chip color="accent">Accent Chip</mat-chip>
+				<mat-chip color="warn">Warn Chip</mat-chip>
+			</mat-chip-set>
+		</div>
+
+		<h3>Progress Indicators</h3>
+		<div class="component-row">
+			<mat-progress-bar color="primary" mode="determinate" value="40"></mat-progress-bar>
+			<mat-progress-bar color="accent" mode="determinate" value="60"></mat-progress-bar>
+			<mat-progress-bar color="warn" mode="determinate" value="80"></mat-progress-bar>
+		</div>
+	</div>
+</div>
+
+<style>
+	.test-container {
+		padding: 2rem;
+		min-height: 100vh;
+		transition: all 0.3s ease;
+	}
+
+	.theme-card {
+		padding: 1.5rem;
+		border-radius: 12px;
+		margin-bottom: 2rem;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+	}
+
+	.theme-toggle {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		margin: 1rem 0;
+	}
+
+	.button-row,
+	.component-row {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+		margin-bottom: 2rem;
+		align-items: center;
+	}
+
+	h2,
+	h3 {
+		margin-bottom: 1rem;
+	}
+
+	.color-showcase {
+		padding: 1.5rem;
+		border-radius: 12px;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+	}
+</style>

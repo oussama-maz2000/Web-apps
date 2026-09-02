@@ -1,0 +1,150 @@
+@use '@angular/material' as mat; //prebuilt palettes
+@use 'tailwindcss';
+
+@use './themes/material_theme-colors.scss' as my-theme;
+@use './snackbar-overrides.scss';
+@use './review-components.scss';
+@use './footer-component.css';
+
+//@plugin "@tailwindcss/line-clamp"; //keep hre commented out in case is required for line-clamp to be imported (work properly) from tailwind
+
+// The theme is already applied in test.scss via mat.all-component-colors
+html,
+body {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	overflow: auto; // prevents double scrollbar
+	scroll-behavior: smooth;
+}
+
+body {
+	font-family: Roboto, 'Helvetica Neue', sans-serif;
+	font-size: 1rem;
+}
+
+:root {
+	--main-bg-color: var(--mat-sys-surface);
+	--overlap-margin: -5em;
+	--main-color: var(--mat-sys-primary);
+	--main-end-gradient-color: var(--gold-100);
+	--navbar-height: 60px;
+}
+
+::ng-deep app-root {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+}
+
+@media only screen and (min-width: 768px) {
+	.mobile-only {
+		display: none !important;
+	}
+}
+
+@media only screen and (max-width: 800px) {
+	.laptop-only {
+		display: none !important;
+	}
+
+	.flex-column-on-mobile {
+		flex-direction: column;
+	}
+
+	html {
+		font-size: 75%;
+	}
+
+	h1 {
+		font-size: 2rem;
+		/* 90% of 32px = 28.8px */
+	}
+
+	h2 {
+		font-size: 1.8rem;
+		/* 90% of 28.8px */
+	}
+
+	h3 {
+		font-size: 1.75rem;
+		/* 28px */
+	}
+
+	h4 {
+		font-size: 1.5rem;
+		/* 24px */
+	}
+
+	h5 {
+		font-size: 1.25rem;
+		/* 20px */
+	}
+
+	h6 {
+		font-size: 1rem;
+		/* 16px */
+	}
+}
+
+// Hide the reveal icon of password fields in Edge, leaving only the Angular Material icon visible.
+input[type='password']::-ms-reveal {
+	display: none;
+}
+
+// Server messages
+.server-errors {
+	list-style: none;
+	padding: 0.75rem;
+	margin: 0 0 1rem;
+	background-color: #feecec;
+	border-radius: 4px;
+
+	.error-message {
+		color: var(--mat-sys-error);
+		font-size: 0.875rem;
+		margin-bottom: 0.25rem;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+}
+
+.form-level-error {
+	color: var(--mat-sys-error); // Using our theme's error color
+	font-size: 75%; // mat-error is typically 75% of the form field's font size
+	margin-top: -1em; // Approximate adjustment, review and tweak as needed
+	display: block; // Ensures it takes up its own line
+	text-align: start; // Aligns with other mat-errors
+	padding-left: 16px; // Align with mat-error text when inside a fill/outline form field
+}
+
+.server-success {
+	list-style: none;
+	padding: 0.75rem;
+	margin: 0 0 1rem;
+	background-color: #e8f8d8;
+	border-radius: 4px;
+
+	.success-message {
+		color: #4caf50;
+		font-size: 0.875rem;
+		margin-bottom: 0.25rem;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+}
+
+.flex-spacer {
+	flex: 1;
+}
+
+.full-width {
+	width: 100%;
+}
